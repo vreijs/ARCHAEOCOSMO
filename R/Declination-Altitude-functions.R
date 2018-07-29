@@ -30,13 +30,14 @@
 ####################################################################
 
 #software version
-Version="1.01"
+Version = "1.01"
 
 #default waardes
 TempDefault <- 15
 PressureDefault <- 1013.25
 RimDefault <- 0
 LapseDefault <- 0.0065
+DeltaAppAltDefault <- 1e-7
 
 #lowest apparent altitude to provide
 LowestAppAlt <- -3.5
@@ -105,7 +106,8 @@ AvgRadius <- 16 / 60 #[Deg]
 
 ###################################################################
 ARCHAEOCOSMO <- function() {
-return(Version)}
+  return(Version)
+}
 
 ###################################################################
 #' Determine topocentric Aaltiude from apparent altitude
@@ -421,8 +423,8 @@ S_GeoDecfromAppAlt <-
     if (ObjectDist == "star") {
       Rim = 0
     }
-    DeclAngle <- S_GeoDecfromGeoAlt(Lat, GeoAlt, Azi, Rim)
-    return(DeclAngle)
+    DecAngle <- S_GeoDecfromGeoAlt(Lat, GeoAlt, Azi, Rim)
+    return(DecAngle)
   }
 
 ###################################################################
@@ -459,10 +461,10 @@ S_GeoDecfromGeoAlt <-
     GeoAlti <- (GeoAlt - Rim * AvgRadius) * Deg2Rad
     Azii <- Azi * Deg2Rad
     # http://www.iol.ie/~geniet/eng/accuracy.htm
-    DeclAngle <-
+    DecAngle <-
       asin(sin(Lati) * sin(GeoAlti) + cos(Lati) * cos(GeoAlti) * cos(Azii))
-    DeclAngle  <- DeclAngle  * Rad2Deg
-    return(DeclAngle)
+    DecAngle  <- DecAngle  * Rad2Deg
+    return(DecAngle)
   }
 
 ###################################################################
@@ -727,14 +729,14 @@ RefractConstfromLapse <- function (Lapse = LapseDefault) {
 }
 
 ###################################################################
-StdGeoDecl <-
+StdGeoDec <-
   function (Lat, StdLat, GeoAlt, StdGeoAlt, Azi, StdAzi) {
     functionvector <-
       data.frame(Lat, StdLat, GeoAlt, StdGeoAlt, Azi, StdAzi)
     ResultVector <- c(0)
     for (i in 1:nrow(functionvector))
     {
-      ResultVector[i] = S_StdGeoDecl(
+      ResultVector[i] = S_StdGeoDec(
         functionvector$Lat[i],
         functionvector$StdLat[i],
         functionvector$GeoAlt[i],
@@ -747,7 +749,7 @@ StdGeoDecl <-
   }
 
 ###################################################################
-S_StdGeoDecl <-
+S_StdGeoDec <-
   function(Lat, StdLat, GeoAlt, StdGeoAlt, Azi, StdAzi) {
     # Lat [deg]
     # StdLat [deg]
@@ -755,7 +757,7 @@ S_StdGeoDecl <-
     # StdGeoAlt [deg]
     # Azi [deg]
     # StdAzi [deg]
-    # StdGeoDecl [deg]
+    # StdGeoDec [deg]
     
     Lati <- Lat * Deg2Rad
     StdLati <- StdLat * Deg2Rad
@@ -764,17 +766,17 @@ S_StdGeoDecl <-
     Azii <- Azi * Deg2Rad
     StdAzii <- StdAzi * Deg2Rad
     #http://archaeocosmology.org/eng/accuracy.htm
-    GeoDecli <- S_GeoDecfromGeoAlt(Lat, GeoAlt, Azi) * Deg2Rad
-    StdDeclLat <-
-      abs(StdLati / cos(GeoDecli) * (cos(Lati) * sin(GeoAlti) - sin(Lati) * cos(GeoAlti) *
-                                       cos(Azii))) * Rad2Deg
-    StdDeclGeoAlt <-
-      abs(StdGeoAlti / cos(GeoDecli) * (sin(Lati) * cos(GeoAlti) - cos(Lati) * sin(GeoAlti) *
-                                          cos(Azii))) * Rad2Deg
-    StdDeclAzi <-
-      abs(StdAzii / cos(GeoDecli) * (sin(Lati) * sin(GeoAlti) - cos(Lati) * cos(GeoAlti) *
-                                       sin(Azii))) * Rad2Deg
-    Error <- sqrt(StdDeclLat ^ 2 + StdDeclGeoAlt ^ 2 + StdDeclAzi ^ 2)
+    GeoDeci <- S_GeoDecfromGeoAlt(Lat, GeoAlt, Azi) * Deg2Rad
+    StdDecLat <-
+      abs(StdLati / cos(GeoDeci) * (cos(Lati) * sin(GeoAlti) - sin(Lati) * cos(GeoAlti) *
+                                      cos(Azii))) * Rad2Deg
+    StdDecGeoAlt <-
+      abs(StdGeoAlti / cos(GeoDeci) * (sin(Lati) * cos(GeoAlti) - cos(Lati) * sin(GeoAlti) *
+                                         cos(Azii))) * Rad2Deg
+    StdDecAzi <-
+      abs(StdAzii / cos(GeoDeci) * (sin(Lati) * sin(GeoAlti) - cos(Lati) * cos(GeoAlti) *
+                                      sin(Azii))) * Rad2Deg
+    Error <- sqrt(StdDecLat ^ 2 + StdDecGeoAlt ^ 2 + StdDecAzi ^ 2)
     return(Error)
   }
 
@@ -837,6 +839,418 @@ S_REarth <- function (Lat = AverageLat) {
   }
   return(Radius)
 }
+
+###################################################################
+#' Determine the rise angle of the celestial object
+#'
+#' blabla
+#'
+#' @param Lat the apparent altitude (deg), double vector
+#' @param GeoDec the geocentric declination (deg), double vector
+#' @param AppAlt the apparent altitude (deg), double vector
+#' @param AppAltDelta a small step in apparent altitude (deg), double vector
+#' @param TempE Temperature at Height eyes (C), double vector
+#' @param PresE Airpressure at height eye (mbar), double vector
+#' @param ObjectDist the name of celestial object, charector vector
+#' @param Rim the place to be taken on the clestila object's disc, integer vector
+#'
+#' @return RiseAngle the apparent rise angle (deg), double
+#'
+#' @examples
+#' TopoAltfromAppAlt(0,15,1013.25)
+#'
+#' @export
+RiseAngle <-
+  function (Lat,
+            GeoDec,
+            AppAlt,
+            DeltaAppAlt = DeltaAppAltDefault,
+            TempE = TempDefault,
+            PresE = PressureDefault,
+            ObjectDist,
+            Rim = RimDefault) {
+    functionvector <-
+      data.frame(Lat,
+                 GeoDec,
+                 AppAlt,
+                 DeltaAppAlt,
+                 TempE,
+                 PresE,
+                 ObjectDist,
+                 Rim,
+                 stringsAsFactors = FALSE)
+    print(functionvector)
+    ResultVector <- c(0)
+    for (i in 1:nrow(functionvector))
+    {
+      ResultVector[i] = S_RiseAngle(
+        functionvector$Lat[i],
+        functionvector$GeoDec[i],
+        functionvector$AppAlt[i],
+        functionvector$DeltaAppAlt[i],
+        functionvector$TempE[i],
+        functionvector$PresE[i],
+        functionvector$ObjectDist[i],
+        functionvector$Rim[i]
+      )
+    }
+    return(ResultVector)
+  }
+
+###################################################################
+S_RiseAngle <-
+  function(Lat,
+           GeoDec,
+           AppAlt,
+           DeltaAppAlt = DeltaAppAltDefault,
+           TempE = TempDefault,
+           PresE = PressureDefault,
+           ObjectDist,
+           Rim = RimDefault) {
+    # ' Lat [Deg]
+    # ' GeoDec [Deg]
+    # ' AppAlt [deg]
+    # ' DeltaAppAlt [deg]
+    # ' TempE [C]
+    # ' PresE [mbar]
+    # ' ObjectDist [moonavg,moonnearest,moonfurthest,sun,star,topo]
+    # ' Rim [-1,0,1]
+    # ' RiseAngle [deg]
+    
+    GeoDeci <- GeoDec * Deg2Rad
+    AppAlt1 <- AppAlt
+    AppAlt2 <- AppAlt + DeltaAppAlt
+    TopoAlt1 <- TopoAltfromAppAlt(AppAlt1, TempE, PresE)
+    TopoAlt2 <- TopoAltfromAppAlt(AppAlt2, TempE, PresE)
+    GeoAlt1 <- S_GeoAltfromTopoAlt(TopoAlt1, ObjectDist)
+    GeoAlt2 <- S_GeoAltfromTopoAlt(TopoAlt2, ObjectDist)
+    Azi1 <- S_AzifromGeoAlt(Lat, GeoAlt1, GeoDec, Rim)
+    Azi2 <- S_AzifromGeoAlt(Lat, GeoAlt2, GeoDec, Rim)
+    DeltaAzii <- (Azi2 - Azi1) * Deg2Rad
+    DeltaAppAlti <- DeltaAppAlt * Deg2Rad
+    # below should be a spherical angle determination, but angles are assumed small enough
+    # Reijs, 2006
+    Angle <- atan(DeltaAppAlti / DeltaAzii) * Rad2Deg
+    return(Angle)
+  }
+
+###################################################################
+S_AzifromGeoAlt <- function(Lat, GeoAlt, GeoDec, Rim) {
+  # ' Lat [deg]
+  # ' GeoAlt [deg]
+  # ' GeoDec [deg]
+  # ' Rim [-1,0, 1] -1=bottom, 0=center, 1=top
+  # ' AzimuthfromGeoAlt [deg]
+  
+  Lati <- Lat * Deg2Rad
+  GeoAlti <- (GeoAlt - Rim * AvgRadius) * Deg2Rad
+  GeoDeci <- GeoDec * Deg2Rad
+  # http://www.iol.ie/~geniet/eng/accuracy.htm
+  Hoek <-
+    (sin(GeoDeci) - sin(Lati) * sin(GeoAlti)) / (cos(Lati) * cos(GeoAlti))
+  #If Abs(Hoek) <= 1 Then
+  Angle <- acos(Hoek) * Rad2Deg
+  return(Angle)
+}
+
+###################################################################
+S_AzifromAppAlt <-
+  function(Lat,
+           AppAlt,
+           GeoDec,
+           Rim = RimDefault,
+           ObjectDist,
+           TempE = TempDefault,
+           PresE = PressureDefault) {
+    # ' Lat [deg]
+    # ' AppAlt [deg]
+    # ' GeoDec [deg]
+    # ' Rim [-1,0, 1] -1=bottom, 0=center, 1=top
+    # ' ObjectDist [moonavg, moonnearest,moonfurthest,sun,star,topo]
+    # ' TempE [C]
+    # ' PresE [mbar]
+    # ' AzimuthfromAppAlt [deg]
+    
+    TopoAlt <- S_TopoAltfromAppAlt(AppAlt, TempE, PresE)
+    GeoAlt <- S_GeoAltfromTopoAlt(TopoAlt, ObjectDist)
+    Angle <- S_AzifromGeoAlt(Lat, GeoAlt, GeoDec, Rim)
+    return(Angle)
+  }
+
+###################################################################
+S_GeoDeclfromSolarLunarEvent <-
+  function(JDNDays, Object, DeclType="geo", NS) {
+    # ' JDNDays [Day]
+    # ' Object [solstice,moonmajor,moonminor]
+    # ' DeclType [geo,topo]
+    # ' NS (0=South-Winter,1=North-Summer)
+    # ' GeoDeclfromSolarLunarEvent [deg]
+    
+    Perturbation <- 1
+    Object <- tolower(Object)
+    Angle <- S_Sunobliquity(JDNDays)
+    if (Object == "moonmajor") {
+      Angle = Angle + (MoonInclination + Perturbation * MoonPerturb)
+    }
+    if (Object == "moonminor") {
+      Angle = Angle - (MoonInclination + Perturbation * MoonPerturb)
+    }
+    if (NS == 0) {
+      Angle = -Angle
+    }
+    if (DeclType == "topo") {
+      if (Object != "solstice") {
+        Angle <- Angle - MoonAvgPar
+      }
+      else {
+        Angle = Angle - SunPar
+      }
+    }
+    return(Angle)
+  }
+
+
+###################################################################
+S_HourAngle <- function(TopoAlt, TopoDecl, Lat) {
+  # ' TopoAlt [deg]
+  # ' TopoDecl [deg]
+  # ' Lat [deg]
+  # ' HourAngle [hour]
+  
+  Alti <- TopoAlt * Deg2Rad
+  decli <- TopoDecl * Deg2Rad
+  Lati <- Lat * Deg2Rad
+  # from http://star-www.st-and.ac.uk/~fv/webnotes/chapt12.htm
+  Angle <-
+    ((sin(Alti) - sin(Lati) * sin(decli)) / cos(Lati) / cos(decli))
+  if (Angle > 1) {
+    Angle <- 1
+  }
+  if (Angle < -1) {
+    Angle <- -1
+  }
+  Angle = acos(Angle) * Rad2Deg / 15
+  return(Angle)
+}
+
+#does now rok (missing SE)
+###################################################################
+S_HourAnglefromTopoAlt <-
+  function(JDNDaysUT,
+           Lat,
+           Longitude,
+           HeightEye,
+           TempE,
+           PresE,
+           ObjectName,
+           AngleTarget) {
+    # ' AngleTarget [deg]
+    # ' DateObjectAlt [-]
+    
+    Angle = S_HourAngle(
+      AngleTarget,
+      S_ObjectLoc(
+        JDNDaysUT,
+        Lat,
+        Longitude,
+        HeightEye,
+        TempE,
+        PresE,
+        ObjectName,
+        2
+      ),
+      Lat
+    )
+    retunr(Angle)
+  }
+
+###################################################################
+S_AngleinSunsPath <-
+  function(DaysSummer,
+           TropYear,
+           AnoYear,
+           Ecc,
+           Perihelion) {
+    # ' DaysSummer [-]
+    # ' TropYear [Day]
+    # ' AnoYear [Day]
+    # ' Ecc [-]
+    # ' Perihelion [Day]
+    # ' AngleinSunsPath [Deg]
+    
+    # V. Reijs, 2004, http://www.iol.ie/~geniet/eng/season.htm
+    Angle = 360 / TropYear * DaysSummer + Ecc * 2 * Rad2Deg * sin(360 / AnoYear * (DaysSummer - Perihelion) * Deg2Rad)
+    return(Angle)
+  }
+
+###################################################################
+S_GeoDecfromDay <-
+  function(DaysSummer,
+           Obl,
+           TropYear,
+           AnoYear,
+           Ecc,
+           Perihelion) {
+    # ' DaysSummer [-]
+    # ' Obl [Deg]
+    # ' TropYear [Day]
+    # ' AnoYear [Day]
+    # ' Ecc [-]
+    # ' Perihelion [Day]
+    # ' GeoDecfromDay [Deg]
+    
+    Obli <- Obl * Deg2Rad
+    # V. Reijs, 2004, http://www.iol.ie/~geniet/eng/season.htm
+    Angle <-
+      asin(sin(Obli) * cos((
+        360 / TropYear * DaysSummer + Ecc * 2 * Rad2Deg * sin(360 / AnoYear * (DaysSummer - Perihelion) * Deg2Rad)
+      ) * Deg2Rad)) * Rad2Deg
+    return(Angle)
+  }
+
+###################################################################
+S_DayfromGeoDec <- function(GeoDec, JDNDays, AfterSummer) {
+  # ' GeoDec [Deg]
+  # ' JDNDays [Day]
+  # ' AfterSummer [0, 1]
+  # ' DayfromGeoDec [-]
+  
+  TropYear <- S_TropicalYear(JDNDays, "mean")
+  AnoYear <- S_AnomalisticYear(JDNDays)
+  Obli <- S_Sunobliquity(JDNDays)
+  Ecc <- S_Eccentricity(JDNDays)
+  Perihelion <- S_PerihelionNumber(JDNDays)
+  maxerror <- 0.0000001
+  richting <- 1
+  stap <- 1
+  # V. Reijs, http: /  / www.iol.ie /  ~ geniet / eng / season.htm
+  dayoud <- S_DayfromGeoDecSimple(GeoDec, JDNDays)
+  if (AfterSummer == 1) {
+    dayoud = -dayoud
+  }
+  if (Obli >= GeoDec) {
+    declioud <-
+      S_GeoDecfromDay(dayoud, Obli, TropYear, AnoYear, Ecc, Perihelion)
+    difoud <- declioud - GeoDec
+    if (difoud < 0) {
+      signoud = -1
+    } else {
+      signoud = 1
+    }
+    while (abs(difoud) > maxerror) {
+      daynew <- dayoud + richting * stap
+      declinew <-
+        S_GeoDecfromDay(daynew, Obli, TropYear, AnoYear, Ecc, Perihelion)
+      difnew <- declinew - GeoDec
+      if (difnew < 0) {
+        signnew = -1
+      } else {
+        signnew = 1
+      }
+      if (signnew == signoud) {
+        if (abs(difnew) > abs(difoud)) {
+          richting = -richting
+        }
+      }
+      else {
+        richting = -richting
+        stap <- stap / 2
+      }
+      difoud <- difnew
+      signoud <- signnew
+      dayoud <- daynew
+    }
+  }
+  else {
+    dayoud = NA
+  }
+  Angle <- dayoud
+  return(Angle)
+}
+
+###################################################################
+S_DayfromGeoDecSimple <- function(GeoDec, JDNDays) {
+  # ' GeoDec [Deg]
+  # ' JDNDays [Day]
+  # ' DayfromGeoDecSimple [-]
+  
+  anglei <- GeoDec * Deg2Rad
+  Obliquityi <- S_Sunobliquity(JDNDays) * Deg2Rad
+  # Ruggles, 1999, Astronomy in prehistoric Britain and Ireland, page 24
+  if (Obliquityi > anglei) {
+    Day = acos(sin(anglei) / sin(Obliquityi)) * Rad2Deg / 0.9856
+  }
+  else {
+    Day = NA
+  }
+  return(Day)
+}
+
+###################################################################
+S_DayfromAngle <- function(PathAngle, JDNDays) {
+  # ' PathAngle [Deg]
+  # ' JDNDays [Day]
+  # ' DayfromAngle [-]
+  
+  TropYear <- S_TropicalYear(JDNDays, "mean")
+  AnoYear <- S_AnomalisticYear(JDNDays)
+  Ecc <- S_Eccentricity(JDNDays)
+  Perihelion <- S_PerihelionNumber(JDNDays)
+  maxerror <- 0.0000001
+  richting <- 1
+  stap <- 1
+  # V. Reijs, http://www.iol.ie/~geniet/eng/season.htm
+  dayoud <- (PathAngle / 90) * 365.2424 / 4
+  angleoud <-
+    S_AngleinSunsPath(dayoud, TropYear, AnoYear, Ecc, Perihelion)
+  difoud <- angleoud - PathAngle
+  if (difoud < 0) {
+    signoud = -1
+  } else {
+    signoud = 1
+  }
+  while (abs(difoud) > maxerror) {
+    daynew <- dayoud + richting * stap
+    anglenew <-
+      S_AngleinSunsPath(daynew, TropYear, AnoYear, Ecc, Perihelion)
+    difnew <- anglenew - PathAngle
+    if (difnew < 0) {
+      signnew = -1
+    } else {
+      signnew = 1
+    }
+    if (signnew == signoud) {
+      if (abs(difnew) > abs(difoud)) {
+        richting = -richting
+      }
+    }
+    else {
+      richting <- -richting
+      stap <- stap / 2
+    }
+    difoud <- difnew
+    signoud <- signnew
+    dayoud <- daynew
+  }
+  Day = dayoud
+  return(Day)
+}
+
+###################################################################
+S_GeoAltfromGeoDecHour <- function(Lat, GeoDec, GeoHour) {
+# ' Lat [deg]
+# ' GeoDec [deg]
+# ' GeoHour [deg]
+# ' GeoAltfromGeoDecHour [deg]
+
+Lati <- Lat * Deg2Rad
+GeoHouri <- GeoHour * Deg2Rad
+GeoDeci <- GeoDec * Deg2Rad
+# Astropnomy with personal computer, P. Dufffett-Smith
+Angle = asin(sin(GeoDeci) * sin(Lati) + cos(GeoDeci) * cos(GeoHouri) * cos(Lati))
+Angle = Angle * Rad2Deg
+return(Angle)}
+
 
 #Testresults
 TopoAltfromAppAlt(0, 15, 1013.25) + 0.5598886

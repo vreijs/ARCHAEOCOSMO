@@ -129,6 +129,154 @@ JDutfromDate <- function (DateString,
 }
 
 ###################################################################
+S_DatefromJDut <- function(JDNDaysUT,
+                           Argument = 0,
+                           CalType = 0) {
+  # ' JDNDaysUT [-]
+  # ' Argument []
+  # ' CalType (=0: Greg/Julian 1582 CE, =1: Proleptic Gregorian always, =2: Proleptic Julian always)
+  # ' DatefromJDut [yyy/mm/dd hh:mm:ss (xx. cal.)]
+  
+  # translated from BASIC program of P. Duffett-Smith, Astronomy
+  # with your personal computer
+  JDNDaysUTi <- JDNDaysUT - J1900
+  cal <- "(Jul. cal.)"
+  D <- JDNDaysUTi + 0.5
+  i <- floor(D)
+  fd <- D - i
+  if (fd == 1) {
+    fd = 0
+    i = i + 1
+  }
+  if (CalType != 2) {
+    if ((i > -115860) || (CalType == 1)) {
+      A = floor((i / 36524.25) + 0.99835726) + 14
+      i = i + 1 + A - floor(A / 4)
+      cal = "(Greg. cal.)"
+    }
+  }
+  bb <- floor((i / 365.25) + 0.802601)
+  C <- i - floor((365.25 * bb) + 0.750001) + 416
+  Gd <- floor(C / 30.6001)
+  mn <- Gd - 1
+  dy <- C - floor(30.6001 * Gd) + fd
+  YR <- bb + 1899
+  if (Gd > 13.5) {
+    mn <- Gd - 13
+  }
+  if (mn < 2.5) {
+    YR <- bb + 1900
+  }
+  if (YR < 1) {
+    YR <- YR - 1
+  }
+  di <- floor(dy)
+  fd <- fd * 24
+  uur <- floor(fd)
+  minu <- floor((fd - uur) * 60)
+  sec <- floor(((fd - uur) * 60 - minu) * 60)
+  if (Argument == -4) {
+    Date <- cal
+  }
+  if (Argument == -3) {
+    Date <- fd
+  }
+  #if (Argument == -2) {Date <- TimeValue(Str$(uur) + ":" + Str$(minu) + ":" + Str$(sec))}
+  if (Argument == -5) {
+    Date <-
+      paste(as.character(uur),
+            ":",
+            as.character(minu),
+            ":",
+            as.character(sec),
+            sep = "")
+  }
+  if (YR > 0) {
+    if (Argument == 0) {
+      Date <-
+        paste(
+          as.character(YR),
+          " CE /",
+          as.character(mn),
+          "/",
+          as.character(di),
+          " ",
+          as.character(uur),
+          ":",
+          as.character(minu),
+          ":",
+          as.character(sec),
+          " ",
+          cal,
+          sep = ""
+        )
+    }
+    if (Argument == -1) {
+      Date <-
+        paste(as.character(YR),
+              "/",
+              as.character(mn),
+              "/",
+              as.character(di),
+              sep = "")
+    }
+    if (Argument == 1) {
+      Date <- YR
+    }
+  }
+  else {
+    if (Argument == 0) {
+      Date <-
+        paste(
+          as.character(-YR),
+          " BCE /",
+          as.character(mn),
+          "/",
+          as.character(di),
+          " ",
+          as.character(uur),
+          ":",
+          as.character(minu),
+          ":",
+          as.character(sec),
+          " ",
+          cal,
+          sep = ""
+        )
+    }
+    if (Argument == -1) {
+      Date <-
+        paste(as.character(YR + 1),
+              "/",
+              as.character(mn),
+              "/",
+              as.character(di),
+              sep = "")
+    }
+    if (Argument == 1) {
+      Date <- YR + 1
+    }
+  }
+  if (Argument == 2) {
+    Date <- mn
+  }
+  if (Argument == 3) {
+    Date <- di
+  }
+  if (Argument == 4) {
+    Date <- uur
+  }
+  if (Argument == 5) {
+    Date <- minu
+  }
+  if (Argument == 6) {
+    Date <- sec
+  }
+  return(Date)
+}
+
+
+###################################################################
 S_JDutfromDate <- function (DateString,
                             hour = 0,
                             DeltaCorrelation = 0) {
