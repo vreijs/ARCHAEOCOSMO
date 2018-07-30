@@ -181,7 +181,7 @@ S_DatefromJDut <- function(JDNDaysUT,
   if (Argument == -3) {
     Date <- fd
   }
-  #if (Argument == -2) {Date <- TimeValue(Str$(uur) + ":" + Str$(minu) + ":" + Str$(sec))}
+  if (Argument == -2) {Date <- fd/24} #TimeValue(Str$(uur) + ":" + Str$(minu) + ":" + Str$(sec))}
   if (Argument == -5) {
     Date <-
       paste(as.character(uur),

@@ -427,6 +427,64 @@ S_GeoDecfromAppAlt <-
   }
 
 ###################################################################
+TopoDecfromAppAlt <-
+  function(Lat,
+           AppAlt,
+           Azi,
+           Rim = RimDefault,
+           TempE = TempDefault,
+           PresE = PressureDefault) {
+    functionvector <-
+      data.frame(Lat,
+                 AppAlt,
+                 Azi,
+                 Rim,
+                 TempE,
+                 PresE,
+                 stringsAsFactors = FALSE)
+    #  print(functionvector)
+    ResultVector <- c(0)
+    for (i in 1:nrow(functionvector))
+    {
+      ResultVector[i] = S_TopoDecfromAppAlt(
+        functionvector$Lat[i],
+        functionvector$AppAlt[i],
+        functionvector$Azi[i],
+        functionvector$Rim[i],
+        functionvector$TempE[i],
+        functionvector$PresE[i]
+      )
+    }
+    return(ResultVector)
+  }
+
+###################################################################
+S_TopoDecfromAppAlt <-
+  function(Lat,
+           AppAlt,
+           Azi,
+           Rim = RimDefault,
+           TempE = TempDefault,
+           PresE = PressureDefault) {
+    # Lat [deg]
+    # AppAlt [deg]
+    # Azi [deg]
+    # Rim [-1,0, 1] -1=bottom, 0=center, 1=top
+    # TempE [C]
+    # PresE [mbar]
+    # DecfromAppAlt [deg]
+    
+    DecAngle <- S_GeoDecfromAppAlt(Lat,
+               AppAlt,
+               Azi,
+               ObjectDist="topo",
+               Rim = RimDefault,
+               TempE = TempDefault,
+               PresE = PressureDefault)
+    return(DecAngle)
+  }
+
+###################################################################
 GeoDecfromGeoAlt <-
   function(Lat,
            GeoAlt,
@@ -1002,12 +1060,24 @@ S_AzifromAppAlt <-
   }
 
 ###################################################################
-S_GeoDecfromSolarLunarEvent <-
-  function(JDNDays, Object, DeclType = "geo", NS) {
+S_TopoDecfromSolarLunarEvent <- function(JDNDays, Object, NS) {
+    
     # ' JDNDays [Day]
     # ' Object [solstice,moonmajor,moonminor]
-    # ' DeclType [geo,topo]
     # ' NS (0=South-Winter,1=North-Summer)
+    # ' GeoDecfromSolarLunarEvent [deg]
+    
+    Angle <- S_GeoDecfromSolarLunarEvent(JDNDays, Object, NS,"topo")
+return(Angle)}
+
+###################################################################
+#there is a swap of the NS and DeclType arguments compared to VBA code!
+S_GeoDecfromSolarLunarEvent <-
+  function(JDNDays, Object, NS, DeclType = "geo") {
+    # ' JDNDays [Day]
+    # ' Object [solstice,moonmajor,moonminor]
+    # ' NS (0=South-Winter,1=North-Summer)
+    # ' DeclType [geo,topo]
     # ' GeoDecfromSolarLunarEvent [deg]
     
     Perturbation <- 1
