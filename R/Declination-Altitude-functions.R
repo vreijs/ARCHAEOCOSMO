@@ -270,7 +270,6 @@ S_TopoAltfromGeoAlt <- function (GeoAlt, ObjectDist) {
   return(Angle)
 }
 
-
 ###################################################################
 ParallaxfromTopoAlt <- function (TopoAlt, ObjectDist) {
   functionvector <-
@@ -804,6 +803,31 @@ S_GCenLatfromGDetLat <- function(GDetLat) {
 }
 
 ###################################################################
+GDetLatfromGCenLat <-
+  function (GCenLat) {
+    functionvector <-
+      data.frame(GCenLat)
+    ResultVector <- c(0)
+    for (i in 1:nrow(functionvector))
+    {
+      ResultVector[i] = S_GDetLatfromGCenLat(functionvector$GCenLat[i])
+    }
+    return(ResultVector)
+  }
+
+###################################################################
+S_GDetLatfromGCenLat <- function(GCenLat) {
+# ' GCenLat [deg]
+# ' GDetLatfromGCenLat [deg]
+
+# Geodetic is closer to astronomical laittude and geocentric: https://www.cv.nrao.edu/~rfisher/Ephemerides/earth_rot.html#obs_coord
+# Wikipedia, http://en.wikipedia.org/wiki/Latitude relating to WGS84
+# Inverse of GCenLatfromGDetLat
+Angle <- atan(tan(GCenLat * Deg2Rad) / ((Rb / RA) ^ 2)) * Rad2Deg
+return(Angle)}
+
+
+###################################################################
 REarth <- function (Lat = AverageLat) {
   # Lat [deg]
   # REarth [m]
@@ -978,13 +1002,13 @@ S_AzifromAppAlt <-
   }
 
 ###################################################################
-S_GeoDeclfromSolarLunarEvent <-
-  function(JDNDays, Object, DeclType="geo", NS) {
+S_GeoDecfromSolarLunarEvent <-
+  function(JDNDays, Object, DeclType = "geo", NS) {
     # ' JDNDays [Day]
     # ' Object [solstice,moonmajor,moonminor]
     # ' DeclType [geo,topo]
     # ' NS (0=South-Winter,1=North-Summer)
-    # ' GeoDeclfromSolarLunarEvent [deg]
+    # ' GeoDecfromSolarLunarEvent [deg]
     
     Perturbation <- 1
     Object <- tolower(Object)
@@ -1011,18 +1035,18 @@ S_GeoDeclfromSolarLunarEvent <-
 
 
 ###################################################################
-S_HourAngle <- function(TopoAlt, TopoDecl, Lat) {
+S_HourAngle <- function(TopoAlt, TopoDec, Lat) {
   # ' TopoAlt [deg]
-  # ' TopoDecl [deg]
+  # ' TopoDec [deg]
   # ' Lat [deg]
   # ' HourAngle [hour]
   
   Alti <- TopoAlt * Deg2Rad
-  decli <- TopoDecl * Deg2Rad
+  Deci <- TopoDec * Deg2Rad
   Lati <- Lat * Deg2Rad
   # from http://star-www.st-and.ac.uk/~fv/webnotes/chapt12.htm
   Angle <-
-    ((sin(Alti) - sin(Lati) * sin(decli)) / cos(Lati) / cos(decli))
+    ((sin(Alti) - sin(Lati) * sin(Deci)) / cos(Lati) / cos(Deci))
   if (Angle > 1) {
     Angle <- 1
   }
@@ -1062,25 +1086,6 @@ S_HourAnglefromTopoAlt <-
       Lat
     )
     retunr(Angle)
-  }
-
-###################################################################
-S_AngleinSunsPath <-
-  function(DaysSummer,
-           TropYear,
-           AnoYear,
-           Ecc,
-           Perihelion) {
-    # ' DaysSummer [-]
-    # ' TropYear [Day]
-    # ' AnoYear [Day]
-    # ' Ecc [-]
-    # ' Perihelion [Day]
-    # ' AngleinSunsPath [Deg]
-    
-    # V. Reijs, 2004, http://www.iol.ie/~geniet/eng/season.htm
-    Angle = 360 / TropYear * DaysSummer + Ecc * 2 * Rad2Deg * sin(360 / AnoYear * (DaysSummer - Perihelion) * Deg2Rad)
-    return(Angle)
   }
 
 ###################################################################
@@ -1238,18 +1243,19 @@ S_DayfromAngle <- function(PathAngle, JDNDays) {
 
 ###################################################################
 S_GeoAltfromGeoDecHour <- function(Lat, GeoDec, GeoHour) {
-# ' Lat [deg]
-# ' GeoDec [deg]
-# ' GeoHour [deg]
-# ' GeoAltfromGeoDecHour [deg]
-
-Lati <- Lat * Deg2Rad
-GeoHouri <- GeoHour * Deg2Rad
-GeoDeci <- GeoDec * Deg2Rad
-# Astropnomy with personal computer, P. Dufffett-Smith
-Angle = asin(sin(GeoDeci) * sin(Lati) + cos(GeoDeci) * cos(GeoHouri) * cos(Lati))
-Angle = Angle * Rad2Deg
-return(Angle)}
+  # ' Lat [deg]
+  # ' GeoDec [deg]
+  # ' GeoHour [deg]
+  # ' GeoAltfromGeoDecHour [deg]
+  
+  Lati <- Lat * Deg2Rad
+  GeoHouri <- GeoHour * Deg2Rad
+  GeoDeci <- GeoDec * Deg2Rad
+  # Astropnomy with personal computer, P. Dufffett-Smith
+  Angle = asin(sin(GeoDeci) * sin(Lati) + cos(GeoDeci) * cos(GeoHouri) * cos(Lati))
+  Angle = Angle * Rad2Deg
+  return(Angle)
+}
 
 
 #Testresults

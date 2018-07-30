@@ -85,7 +85,7 @@ BaseClassicSM <-
 
 
 ###################################################################
-DateConversion <- function (JDNDays, Yeartype, Epoch) {
+S_DateConversion <- function (JDNDays, Yeartype, Epoch) {
   # JDNDays [Day]
   # Yeartype [julian,tropical]
   # Epoch [year]
@@ -400,7 +400,7 @@ S_Sunobliquity <- function (JDNDays) {
   # Sunobliquity [deg]
   
   # http://www.iol.ie/~geniet/eng/moonfluct.htm
-  Tbret <- DateConversion(JDNDays, "julian", 2000) / 1000
+  Tbret <- S_DateConversion(JDNDays, "julian", 2000) / 1000
   if (Chapront) {
     # J Hilton et al, Celest.Mech.Dyn.Astron. 94 (2006), 351
     Tbret <- 10 * Tbret
@@ -464,7 +464,8 @@ S_SiderealDay <- function (JDNDays, COD = 0) {
   # http://www.iol.ie/~geniet/eng/moonfluct.htm
   DayL <-
     S_HarmonicSum(S_TropicalYear(JDNDays, "mean") * D2H,
-                  S_SolarDay(JDNDays, COD),-1)
+                  S_SolarDay(JDNDays, COD),
+                  -1)
   return(DayL)
 }
 
@@ -499,7 +500,6 @@ S_HarmonicSum <- function (PeriodA, PeriodB, PlusMin = 1) {
 
 ###################################################################
 S_HD <- function(PeriodA, PeriodB) {
-  HSum <- S_HS(PeriodA,-PeriodB)
   return(HSum)
 }
 
@@ -532,12 +532,12 @@ S_TropicalYear <- function (JDNDays, TropType = "mean") {
   TropType = tolower(TropType)
   if (TropType == "mean") {
     Epoch <- 2000
-    Julcent <- DateConversion(JDNDays, "julian", Epoch) / 100
+    Julcent <- S_DateConversion(JDNDays, "julian", Epoch) / 100
     YearL <- TY(Julcent)
   }
   if (TropType == "vsop") {
     Epoch <- 2000
-    Julmil <- DateConversion(JDNDays, "julian", Epoch) / 1000
+    Julmil <- S_DateConversion(JDNDays, "julian", Epoch) / 1000
     YearL <- TYVSOP(Julmil)
   }
   if (TropType == "spring") {
@@ -725,7 +725,7 @@ S_LunarSolarPrecession <- function(JDNDays) {
   
   # http://www.iol.ie/~geniet/eng/moonfluct.htm
   if (Chapront) {
-    Tbret <- DateConversion(JDNDays, "julian", 2000) / 100
+    Tbret <- S_DateConversion(JDNDays, "julian", 2000) / 100
     #PO3rev01
     #    crev1 = (5038.481507 + Tbret * ((-1.0790069 * 2 + Tbret * (-0.00114045 * 3 + Tbret * (0.000132851 * 4 - Tbret * 0.0000000951 * 5))))) / 3600 / 100
     #    Lrev1 = 360 / crev1
@@ -748,7 +748,7 @@ S_LunarSolarPrecession <- function(JDNDays) {
   #        dif = Ltp - LP03pa
   else {
     #derived from P. Bretagnon, Planetary Programs and tables from -4000 to +2800, 1986, page 6
-    Tbret <- DateConversion(JDNDays, "julian", 2000) / 1000
+    Tbret <- S_DateConversion(JDNDays, "julian", 2000) / 1000
     Period <-
       360 / (
         13.96971278 + 0.030888083 * 2 * Tbret + 0.0000214778 * 3 * Tbret ^ 2 - 0.0000653656 * 4 * Tbret ^ 3 - 0.000000501528 * 5 * Tbret ^ 4 + 0.000000048475 * 6 * Tbret ^ 5 + 0.0000000036375 * 7 * Tbret ^ 6
@@ -776,7 +776,7 @@ S_SiderealYear <- function(JDNDays) {
   
   # http://www.iol.ie/~geniet/eng/moonfluct.htm
   if (Chapront) {
-    Tbret = DateConversion(JDNDays, "julian", 2000) / 100
+    Tbret = S_DateConversion(JDNDays, "julian", 2000) / 100
     YearL = 365.256362953 + Tbret * (0.0000001139 + Tbret * (-0.000000000076 - 0.00000000000169 * Tbret))
   }
   else {
@@ -808,8 +808,7 @@ S_EclipticYear <- function(JDNDays) {
   # using my own methodology of simple periods
   YearL <-
     S_HarmonicSum(S_TropicalYear(JDNDays, "mean"),
-                  S_LunarNodalCycle(JDNDays) * Y2D,
-                  -1)
+                  S_LunarNodalCycle(JDNDays) * Y2D,-1)
   return(YearL)
 }
 
@@ -856,7 +855,7 @@ S_ICRSLunarNodalCycle <- function(JDNDays) {
   
   # (derived by T. Peters from Chapront [2002], page 704)
   # http://www.iol.ie/~geniet/eng/moonfluct.htm
-  tret <- DateConversion(JDNDays, "julian", 2000) / 100
+  tret <- S_DateConversion(JDNDays, "julian", 2000) / 100
   Period = (6793.476501 + tret * (0.0124002 + tret * (0.000022325 - tret * 0.00000013985))) * D2Y
   return(Period)
 }
@@ -950,7 +949,7 @@ S_ClimaticPrecession <- function(JDNDays) {
   # ClimaticPrecession [Year]
   
   # http://www.iol.ie/~geniet/eng/moonfluct.htm
-  dd <- DateConversion(JDNDays, "julian", 1900) / 10000 * Y2D
+  dd <- S_DateConversion(JDNDays, "julian", 1900) / 10000 * Y2D
   # drived from Expl. Suppl, page 98
   Period <-
     (360 / (
@@ -1001,13 +1000,12 @@ S_TropicalMonth <- function(JDNDays) {
   
   if (Chapront) {
     MonthL <-
-      HarmonicSum(LunarSolarPrecession(JDNDays) * Y2D,
-                  -SiderealMonth(JDNDays),
+      HarmonicSum(LunarSolarPrecession(JDNDays) * Y2D,-SiderealMonth(JDNDays),
                   1)
   }
   else {
     # http://www.iol.ie/~geniet/eng/moonfluct.htm
-    dd <- DateConversion(JDNDays, "julian", 1900) / 10000 * Y2D
+    dd <- S_DateConversion(JDNDays, "julian", 1900) / 10000 * Y2D
     # drived from Expl. Suppl, page 107
     MonthL <-
       360 / (13.1763965268 - 0.000085 / 10000 * 2 * dd + 0.000000039 / 10000 * 3 * dd ^ 2)
@@ -1060,7 +1058,7 @@ S_SiderealMonth <- function(JDNDays) {
   # using my own methodology of simple periods
   if (Chapront) {
     # derived by T. Peters from Chapront [2002], page 704
-    tret <- DateConversion(JDNDays, "julian", 2000) / 100
+    tret <- S_DateConversion(JDNDays, "julian", 2000) / 100
     MonthL <-
       27.32166155356 + tret * (0.000000216673 + tret * (-0.00000000031243 + tret * 1.9989E-12))
   }
@@ -1093,8 +1091,7 @@ S_DraconicMonth <- function(JDNDays) {
   # http://www.iol.ie/~geniet/eng/moonfluct.htm
   # using my own methodology of simple periods
   MonthL = S_HarmonicSum(S_LunarNodalCycle(JDNDays) * Y2D,
-                         S_TropicalMonth(JDNDays),
-                         -1)
+                         S_TropicalMonth(JDNDays),-1)
   retunr(MonthL)
 }
 
@@ -1116,7 +1113,7 @@ S_Eccentricity <- function(JDNDays) {
   
   # http://www.iol.ie/~geniet/eng/moonfluct.htm
   # from Expl. Suppl, page 98
-  Julcent <- DateConversion(JDNDays, "julian", 1900) / 100
+  Julcent <- S_DateConversion(JDNDays, "julian", 1900) / 100
   Period <-
     0.01675104 - 0.0000418 * Julcent - 0.000000126 * Julcent ^ 2
   return(Period)
@@ -1141,7 +1138,7 @@ S_PerihelionNumber <- function(JDNDays) {
   # Determined by V. Reijs (using SkyMap)
   # http://www.iol.ie/~geniet/eng/moonfluct.htm
   # http://www.iol.ie/~geniet/eng/season.htm
-  Julcent <- DateConversion(JDNDays, "julian", 2000)
+  Julcent <- S_DateConversion(JDNDays, "julian", 2000)
   Number <- 197.26 + Julcent * 0.017808333
   return(Number)
 }
@@ -1164,7 +1161,7 @@ S_ICRSLunarApseCycle <- function(JDNDays) {
   
   # (Chapront [2002], page 704)
   # http://www.iol.ie/~geniet/eng/moonfluct.htm
-  tret <- DateConversion(JDNDays, "julian", 2000) / 100
+  tret <- S_DateConversion(JDNDays, "julian", 2000) / 100
   Period <-
     (3232.60542496 + tret * (0.0168939 + tret * (0.000029833 - tret * 0.00000018809))) * D2Y
   return(Period)
@@ -1195,6 +1192,18 @@ S_LunarApseCycle <- function(JDNDays) {
 }
 
 ###################################################################
+DayfromAngle <- function (PathAngle, JDNDays) {
+  functionvector <- data.frame(PathAngle, JDNDays)
+  #  print(functionvector)
+  ResultVector <- c(0)
+  for (i in 1:nrow(functionvector))
+  {
+    ResultVector[i] = S_DayfromAngle(functionvector$PathAngle[i], functionvector$JDNDays[i])
+  }
+  return(ResultVector)
+}
+
+###################################################################
 S_DayfromAngle <- function(PathAngle, JDNDays) {
   # ' PathAngle [Deg]
   # ' JDNDays [Day]
@@ -1210,7 +1219,7 @@ S_DayfromAngle <- function(PathAngle, JDNDays) {
   # V. Reijs, http://www.iol.ie/~geniet/eng/season.htm
   dayoud <- (PathAngle / 90) * 365.2424 / 4
   angleoud <-
-    S_AngleinSunsPath(dayoud, TropYear, AnoYear, Ecc, Perihelion)
+    S_AngleinSunsPathfromDay(dayoud, TropYear, AnoYear, Ecc, Perihelion)
   difoud <- angleoud - PathAngle
   if (difoud < 0) {
     signoud <- -1
@@ -1220,7 +1229,7 @@ S_DayfromAngle <- function(PathAngle, JDNDays) {
   while (abs(difoud) > maxerror) {
     daynew <- dayoud + richting * stap
     anglenew <-
-      S_AngleinSunsPath(daynew, TropYear, AnoYear, Ecc, Perihelion)
+      S_AngleinSunsPathfromDay(daynew, TropYear, AnoYear, Ecc, Perihelion)
     difnew <- anglenew - PathAngle
     if (difnew < 0) {
       signnew <- -1
@@ -1240,20 +1249,191 @@ S_DayfromAngle <- function(PathAngle, JDNDays) {
     signoud <- signnew
     dayoud <- daynew
   }
-  return(dayoud)}
+  return(dayoud)
+}
 
 ###################################################################
-S_AngleinSunsPath <- function(DaysSummer, TropYear, AnoYear, Ecc, Perihelion) {
-  # ' DaysSummer [-]
-  # ' TropYear [Day]
-  # ' AnoYear [Day]
-  # ' Ecc [-]
-  # ' Perihelion [Day]
-  # ' AngleinSunsPath [Deg]
-  
-  # V. Reijs, 2004, http://www.iol.ie/~geniet/eng/season.htm
-  Angle <- 360 / TropYear * DaysSummer + Ecc * 2 * Rad2Deg * sin(360 / AnoYear * (DaysSummer - Perihelion) * Deg2Rad)
-  return(Angle)}
+AngleinSunsPathfromDay <-
+  function (DaysSummer,
+            TropYear,
+            AnoYear,
+            Ecc,
+            Perihelion) {
+    functionvector <-
+      data.frame(DaysSummer, TropYear, AnoYear, Ecc, Perihelion)
+    #  print(functionvector)
+    ResultVector <- c(0)
+    for (i in 1:nrow(functionvector))
+    {
+      ResultVector[i] = S_AngleinSunsPathfromDay(
+        functionvector$DaysSummer[i],
+        functionvector$TropYear[i],
+        functionvector$AnoYear[i],
+        functionvector$Ecc[i],
+        functionvector$Perihelion[i]
+      )
+    }
+    return(ResultVector)
+  }
+
+###################################################################
+S_AngleinSunsPathfromDay <-
+  function(DaysSummer,
+           TropYear,
+           AnoYear,
+           Ecc,
+           Perihelion) {
+    # ' DaysSummer [-]
+    # ' TropYear [Day]
+    # ' AnoYear [Day]
+    # ' Ecc [-]
+    # ' Perihelion [Day]
+    # ' AngleinSunsPathfromDay [Deg]
+    
+    # V. Reijs, 2004, http://www.iol.ie/~geniet/eng/season.htm
+    Angle <-
+      360 / TropYear * DaysSummer + Ecc * 2 * Rad2Deg * sin(360 / AnoYear * (DaysSummer - Perihelion) * Deg2Rad)
+    return(Angle)
+  }
+
+###################################################################
+MayaDatefromJDut <- function (JDNDays,
+                              MayaDateType = 0,
+                              DeltaCorrelation = 0) {
+  functionvector <- data.frame(JDNDays, MayaDateType,
+                               DeltaCorrelation)
+  #  print(functionvector)
+  ResultVector <- c(0)
+  for (i in 1:nrow(functionvector))
+  {
+    ResultVector[i] = S_MayaDatefromJDut(
+      functionvector$JDNDays[i],
+      functionvector$MayaDateType[i],
+      functionvector$DeltaCorrelation[i]
+    )
+  }
+  return(ResultVector)
+}
+
+###################################################################
+S_MayaDatefromJDut <-
+  function(JDNDaysUT,
+           MayaDateType = 0,
+           DeltaCorrelation = 0) {
+    # ' JDNDaysUT [-
+    # ' MayaDateType [-1=all, 0=Long count, 1=Tzolkin,2=Haab, 3=Night, 4=Earth ]
+    # ' DeltaCorrelation [Day]
+    # ' DatefromJDut [baktun.katun.tun.winal.kin Tzolkin Haab]
+    
+    Correlation <- GMTCorrelation + DeltaCorrelation
+    DaysfromStart <- JDNDaysUT - Correlation
+    baktun <- floor(DaysfromStart / 144000)
+    DaysfromStart <- DaysfromStart - baktun * 144000
+    katun <- floor(DaysfromStart / 7200)
+    DaysfromStart <- DaysfromStart - katun * 7200
+    tun <- floor(DaysfromStart / 360)
+    DaysfromStart <- DaysfromStart - tun * 360
+    winal <- floor(DaysfromStart / 20)
+    DaysfromStart <- DaysfromStart - winal * 20
+    kin <- floor(DaysfromStart)
+    ut <- DaysfromStart - kin
+    MayaDays <-
+      baktun * 144000 + katun * 7200 + tun * 360 + winal * 20 + kin
+    #method for Tzolkin and Haab from http://mathdl.maa.org/mathDL/46/?pa=content&sa=viewDocument&nodeId=3536&pf=1
+    RoundCalendarRest <-
+      MayaDays - 18980 * floor((MayaDays) / 18980)
+    NightGod <-
+      MayaDays + BaseGlyphG - 9 * floor((MayaDays + BaseGlyphG) / 9)
+    EarthGod <-
+      MayaDays + BaseGlyphZ - 7 * floor((MayaDays + BaseGlyphZ) / 7)
+    if (NightGod == 0) {
+      NightGod <- 9
+    }
+    if (EarthGod == 0) {
+      EarthGod <- 7
+    }
+    TzolkinDay <-
+      RoundCalendarRest - 13 * floor(RoundCalendarRest / 13) + BaseTzolkin
+    TzolkinGod = RoundCalendarRest - 20 * floor(RoundCalendarRest / 20)
+    if (TzolkinDay > 13) {
+      TzolkinDay <- TzolkinDay - 13
+    }
+    if (TzolkinGod == 0) {
+      TzolkinGod <- 20
+    }
+    Haab <- RoundCalendarRest - 365 * floor(RoundCalendarRest / 365)
+    if (Haab <= 11) {
+      HaabGod <- 18
+      HaabDay <- Haab + BaseHaab
+    }
+    else {
+      if (Haab <= 16) {
+        HaabGod <- 19
+        HaabDay <- Haab - 12
+      }
+      else {
+        HaabGod <- floor((Haab - 17) / 20) + 1
+        HaabDay <- (Haab - 17) - (HaabGod - 1) * 20
+      }
+    }
+    if (MayaDateType == -1) {
+      Date <-
+        paste(
+          baktun,
+          ".",
+          katun,
+          ".",
+          tun,
+          ".",
+          winal,
+          ".",
+          kin,
+          " ",
+          TzolkinDay,
+          ":",
+          TzolkinGod,
+          " ",
+          HaabDay,
+          ".",
+          HaabGod,
+          " ",
+          NightGod,
+          sep = ""
+        )
+    }
+    if (MayaDateType == 0) {
+      Date = paste(baktun, ".", katun, ".", tun, ".", winal, ".", kin, sep = "")
+    }
+    if (MayaDateType == 1) {
+      Date <- paste(TzolkinDay, ":", TzolkinGod, sep = "")
+    }
+    if (MayaDateType == 2) {
+      Date <- paste(HaabDay, ".", HaabGod, sep = "")
+    }
+    if (MayaDateType == 3) {
+      Date <- NightGod
+    }
+    if (MayaDateType == 4) {
+      Date <- EarthGod
+    }
+    if (MayaDateType == 5) {
+      Date <- HaabDay
+    }
+    if (MayaDateType == 6) {
+      Date <- HaabGod
+    }
+    if (MayaDateType == 7) {
+      Date <- TzolkinDay
+    }
+    if (MayaDateType == 8) {
+      Date <- TzolkinGod
+    }
+    if (MayaDateType == -2) {
+      Date <- ut
+    }
+    return(Date)
+  }
+
 
 
 options(digits = 10)
@@ -1265,10 +1445,10 @@ JDutfromDate("35/12/1") - 1734175.5
 
 
 # using http://stat.ethz.ch/R-manual/R-devel/library/base/html/dynload.html
-x <- dyn.load("swedll32.dll")
-x
-getLoadedDLLs()
-getDLLRegisteredRoutines(x)
+#x <- dyn.load("swedll32.dll")
+#x
+#getLoadedDLLs()
+#getDLLRegisteredRoutines(x)
 #using https://darrenjw.wordpress.com/2010/12/30/calling-c-code-from-r/
 #y <- .C("swe_get_tid_acc")
 #b <- .C("_swe_deltat@8",as.double(123456))

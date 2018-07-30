@@ -30,7 +30,7 @@
 ####################################################################
 
 ###################################################################
-DistanceAngle <- function(LatA, LongA, LatB, LongB) {
+S_DistanceAngle <- function(LatA, LongA, LatB, LongB) {
   # ' LatA [rad]
   # ' LongA [rad]
   # ' LatB [rad]
@@ -52,7 +52,7 @@ DistanceAngle <- function(LatA, LongA, LatB, LongB) {
 }
 
 ###################################################################
-AngleErrorGPS <- function(mErrorGPS, Distance) {
+S_AngleErrorGPS <- function(mErrorGPS, Distance) {
   # ' mErrorGPS [m]
   # ' distance [m]
   # ' AngleErrorGPS [deg]
@@ -62,7 +62,7 @@ AngleErrorGPS <- function(mErrorGPS, Distance) {
 }
 
 ###################################################################
-BearingPoints <- function(LatA, LongA, LatB, LongB) {
+S_BearingPoints <- function(LatA, LongA, LatB, LongB) {
   # ' LatA [deg]
   # ' LongA [deg]
   # ' LatB [deg]
@@ -73,7 +73,7 @@ BearingPoints <- function(LatA, LongA, LatB, LongB) {
   LatBi <- LatB * Deg2Rad
   LongAi <- LongA * Deg2Rad
   LongBi <- LongB * Deg2Rad
-  Distance <- DistanceAngle(LatAi, LongAi, LatBi, LongBi)
+  Distance <- S_DistanceAngle(LatAi, LongAi, LatBi, LongBi)
   # ???, webpage is not available anymore on the web...
   #mbased on spherical law of cosines
   BearingPoints <-
@@ -99,4 +99,3 @@ BearingPoints <- function(LatA, LongA, LatB, LongB) {
   }
   return (Bearing)
 }
-

@@ -45,5 +45,5 @@ S_Celcius <- function(temp) {
   # ' Celcius [C]
   
   # http://en.wikipedia.org/wiki/Kelvin
-  return(temp - C2K)}
-
+  return(temp - C2K)
+}
