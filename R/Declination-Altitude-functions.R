@@ -1311,7 +1311,7 @@ S_DayfromAngle <- function(PathAngle, JDNDays) {
   return(Day)
 }
 
-###################################################################
+##################################################################
 S_GeoAltfromGeoDecHour <- function(Lat, GeoDec, GeoHour) {
   # ' Lat [deg]
   # ' GeoDec [deg]
