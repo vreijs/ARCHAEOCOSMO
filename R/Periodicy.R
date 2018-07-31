@@ -500,6 +500,7 @@ S_HarmonicSum <- function (PeriodA, PeriodB, PlusMin = 1) {
 
 ###################################################################
 S_HD <- function(PeriodA, PeriodB) {
+
   HSum <- S_HS(PeriodA, -PeriodB)
   return(HSum)
 }
