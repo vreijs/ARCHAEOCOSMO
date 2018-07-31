@@ -1155,7 +1155,7 @@ S_HourAnglefromTopoAlt <-
       ),
       Lat
     )
-    retunr(Angle)
+    return(Angle)
   }
 
 ###################################################################

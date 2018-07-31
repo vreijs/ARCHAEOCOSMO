@@ -4,14 +4,12 @@ Version: 1.0.1
 Authors@R: person("Victor Reijs", email= "web.victor.reijs@gmail.com", role=c("aut","cre"))
 Description: Have geodetic, astronomy and archaeoastornomy functions.
 License: GPL (>= 2)
-URL: 
-BugReports: 
-Depends: 
-    R (>= 3.1)
+URL: http://archaeocosmology.org/eng/archaeocosmoprocedures.htm
+BugReports: https://github.com/vreijs/ARCHAEOCOSMO/issues
+Depends: R (>= 3.1)
 Imports: 
 Suggests: 
 LinkingTo: 
-VignetteBuilder: 
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
