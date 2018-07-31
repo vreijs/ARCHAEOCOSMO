@@ -500,6 +500,7 @@ S_HarmonicSum <- function (PeriodA, PeriodB, PlusMin = 1) {
 
 ###################################################################
 S_HD <- function(PeriodA, PeriodB) {
+  HD = S_HS(PeriodA, -PeriodB)
   return(HSum)
 }
 
@@ -587,7 +588,7 @@ TYVSOP <- function (Julmil) {
   #British Astronomical association, 102, 1, 1992
   YearL <-
     365.242189623 - 0.000061522 * Julmil - 0.0000000609 * Julmil ^ 2 + 0.00000026525 * Julmil ^ 3
-  retunr(YearL)
+  return(YearL)
 }
 
 ###################################################################
