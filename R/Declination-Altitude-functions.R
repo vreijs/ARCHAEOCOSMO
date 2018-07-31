@@ -939,14 +939,14 @@ S_REarth <- function (Lat = AverageLat) {
 #' @return RiseAngle the apparent rise angle (deg), double
 #'
 #' @examples
-#' TopoAltfromAppAlt(0,15,1013.25)
+#' RiseAngle(55,12,0,10,1000,"moonavg",0) -> 28.33387
 #'
 #' @export
 RiseAngle <-
   function (Lat,
             GeoDec,
             AppAlt,
-            DeltaAppAlt = DeltaAppAltDefault,
+#            DeltaAppAlt = DeltaAppAltDefault,
             TempE = TempDefault,
             PresE = PressureDefault,
             ObjectDist,
@@ -955,7 +955,7 @@ RiseAngle <-
       data.frame(Lat,
                  GeoDec,
                  AppAlt,
-                 DeltaAppAlt,
+#                 DeltaAppAlt,
                  TempE,
                  PresE,
                  ObjectDist,
@@ -969,7 +969,7 @@ RiseAngle <-
         functionvector$Lat[i],
         functionvector$GeoDec[i],
         functionvector$AppAlt[i],
-        functionvector$DeltaAppAlt[i],
+#        functionvector$DeltaAppAlt[i],
         functionvector$TempE[i],
         functionvector$PresE[i],
         functionvector$ObjectDist[i],
@@ -984,7 +984,7 @@ S_RiseAngle <-
   function(Lat,
            GeoDec,
            AppAlt,
-           DeltaAppAlt = DeltaAppAltDefault,
+#           DeltaAppAlt = DeltaAppAltDefault,
            TempE = TempDefault,
            PresE = PressureDefault,
            ObjectDist,
@@ -1001,7 +1001,7 @@ S_RiseAngle <-
     
     GeoDeci <- GeoDec * Deg2Rad
     AppAlt1 <- AppAlt
-    AppAlt2 <- AppAlt + DeltaAppAlt
+    AppAlt2 <- AppAlt + DeltaAppAltDefault
     TopoAlt1 <- TopoAltfromAppAlt(AppAlt1, TempE, PresE)
     TopoAlt2 <- TopoAltfromAppAlt(AppAlt2, TempE, PresE)
     GeoAlt1 <- S_GeoAltfromTopoAlt(TopoAlt1, ObjectDist)
@@ -1009,7 +1009,7 @@ S_RiseAngle <-
     Azi1 <- S_AzifromGeoAlt(Lat, GeoAlt1, GeoDec, Rim)
     Azi2 <- S_AzifromGeoAlt(Lat, GeoAlt2, GeoDec, Rim)
     DeltaAzii <- (Azi2 - Azi1) * Deg2Rad
-    DeltaAppAlti <- DeltaAppAlt * Deg2Rad
+    DeltaAppAlti <- DeltaAppAltDefault * Deg2Rad
     # below should be a spherical angle determination, but angles are assumed small enough
     # Reijs, 2006
     Angle <- atan(DeltaAppAlti / DeltaAzii) * Rad2Deg
