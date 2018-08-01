@@ -5,7 +5,9 @@
 #Don't know about minGW yet (although testing it was negative also). 
 
 
-#dyn.load("swedll32.dll")
+x <- dyn.load("swedll32.dll")
+x
+getDLLRegisteredRoutines(x)
 
 #S_swe_version <-function() {
 nulstring<-rawToChar(as.raw(0x1))
@@ -14,12 +16,17 @@ for (i in 1:255) {
 svers <- paste(svers,nulstring,sep="")
 }
 nchar(svers)
-tmp <- .C("swe_version",as.character(svers))
+tmp <- .C("_swe_version@4",as.character(svers))
 tmp
 svers
 #return(svers)}
 
+#VBA code
 #Public Declare Function swe_version Lib "C:\ARCHAEOCOSMO\AddIns\swedll32.dll" _
 #Alias "_swe_version@4" ( _
 #                        ByVal svers As String _
 #) As String
+
+#Delphi (PASCAL) code
+#function swe_version(s: PAnsiChar): PAnsiChar; STDCALL;
+#EXTERNAL DLL_NAME NAME '_swe_version@4';
