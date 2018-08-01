@@ -292,7 +292,7 @@ S_ParallaxfromTopoAlt <- function (TopoAlt, ObjectDist) {
   
   ObjectDist <- tolower(ObjectDist)
   TopoAlti <- TopoAlt * Deg2Rad
-  mpar <- Maxpar(ObjectDist)
+  mpar <- S_Maxpar(ObjectDist)
   # parallax formula derived from http://www.stjarnhimlen.se/comp/ppcomp.html#13
   Angle = mpar * cos(TopoAlti)
   # compensation for celestial objects determined by V. Reijs, 2005
@@ -323,7 +323,7 @@ S_ParallaxfromGeoAlt <- function (GeoAlt, ObjectDist) {
   # ParallaxfromGeoAlt [deg]
   
   GeoAlti <- GeoAlt * Deg2Rad
-  mpar <- Maxpar(ObjectDist)
+  mpar <- S_Maxpar(ObjectDist)
   # parallax formula coming from http://www.stjarnhimlen.se/comp/ppcomp.html#13
   Angle <- mpar * cos(GeoAlti)
   return(Angle)
@@ -331,8 +331,20 @@ S_ParallaxfromGeoAlt <- function (GeoAlt, ObjectDist) {
 
 ###################################################################
 Maxpar <- function (ObjectDist) {
+  functionvector <- data.frame(ObjectDist)
+  #  print(functionvector)
+  ResultVector <- c(0)
+  for (i in 1:nrow(functionvector))
+  {
+    ResultVector[i] = S_Maxpar(functionvector$ObjectDist[i])
+  }
+  return(ResultVector)
+}
+
+###################################################################
+S_Maxpar <- function (ObjectDist) {
   # ObjectDist [sun,moonavg,moonnearest,moonfurthest,star,topo]
-  # Maxpar [deg]
+  # S_Maxpar [deg]
   
   ObjectDist <- tolower(ObjectDist)
   Parallax <- 0
@@ -628,7 +640,7 @@ S_AppAltfromHeights <-
     TopoDistance <-
       S_TopoAltfromHeights(HeightEye, HeightDist, Distance, Lat, 2)
     #distance is the goeid based distance X. So there is an approximation used for the ray distance
-    Angle <- TopoAlt + Rt(TempE, PresE, Lapse, TopoDistance)
+    Angle <- TopoAlt + S_Rt(TempE, PresE, Lapse, TopoDistance)
     if (Restricted == 0) {
       Dip <- S_AppAltfromDip(HeightEye, 0, TempE, PresE, Lapse, Lat)
       if (Dip > Angle) {
@@ -689,7 +701,7 @@ S_TopoAltfromHeights <-
   }
 
 ###################################################################
-Rt <- function (TempE = TempDefault,
+S_Rt <- function (TempE = TempDefault,
                 PresE = PressureDefault,
                 Lapse = LapseDefault,
                 Distance) {
@@ -700,9 +712,9 @@ Rt <- function (TempE = TempDefault,
   # Rt [deg]
   
   # Bomford, G., Geodesy, 1980
-  #Rt = distance * 252 * PresE / (S_Kelvin(TempE) ^ 2) * (0.0342 - Lapse) / RA * Rad2Deg
+  #S_Rt = distance * 252 * PresE / (S_Kelvin(TempE) ^ 2) * (0.0342 - Lapse) / RA * Rad2Deg
   #Wikipedia https://en.wikipedia.org/wiki/Atmospheric_refraction
-  #Rt = distance * 16.3 * PresE / (S_Kelvin(TempE) ^ 2) * (0.0342 - Lapse) / 60 / 60 / 2
+  #S_Rt = distance * 16.3 * PresE / (S_Kelvin(TempE) ^ 2) * (0.0342 - Lapse) / 60 / 60 / 2
   #Thom
   Refract = 0.0083 * RefractConstfromLapse(Lapse) * Distance / 1000 * PresE / (S_Kelvin(TempE) ^ 2)
   return(Refract)
@@ -927,13 +939,13 @@ S_REarth <- function (Lat = AverageLat) {
 #'
 #' blabla
 #'
-#' @param Lat the apparent altitude (deg), double vector
-#' @param GeoDec the geocentric declination (deg), double vector
-#' @param AppAlt the apparent altitude (deg), double vector
-#' @param TempE Temperature at Height eyes (C), double vector
-#' @param PresE Airpressure at height eye (mbar), double vector
-#' @param ObjectDist the name of celestial object, charector vector
-#' @param Rim the place to be taken on the clestila object's disc, integer vector
+#' @param Lat the apparent altitude (deg), double precision vector
+#' @param GeoDec the geocentric declination (deg), double precision  vector
+#' @param AppAlt the apparent altitude (deg), double precision vector
+#' @param TempE Temperature at Height eyes (C), double precision vector and default 15C
+#' @param PresE Airpressure at height eye (mbar), double precision vector and default 1013.25mbar
+#' @param ObjectDist the name of celestial object ("moonavg","moonnearest","moonfurthest","sun","star","topo"]), charector precision vector
+#' @param Rim the place to be taken on the clestial object's disc (bottom=-1, centre=0, top=1), precision integer vector and default middle of disc
 #'
 #' @return RiseAngle the apparent rise angle (deg), double
 #'
@@ -1335,7 +1347,7 @@ GeoAltfromTopoAlt(-0.559888644263346, "moonavg") - 0.3922204
 TopoAltfromGeoAlt(0, "moonavg") + 0.952
 ParallaxfromTopoAlt(-0.559888644263346, "moonavg") - 0.9521091
 ParallaxfromGeoAlt(0, "moonavg") - 0.952
-Maxpar("moonavg") - 0.952
+S_Maxpar("moonavg") - 0.952
 GeoDecfromAppAlt(53, 0, 66, 0, "moonavg", 15, 1013.25) - 14.49181
 GeoDecfromGeoAlt(53, 0, 66, 0) - 14.16885
 TopoAltfromDip(3000, 5) + 1.755515
