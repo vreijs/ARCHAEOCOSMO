@@ -122,14 +122,14 @@ ARCHAEOCOSMO <- function() {
 #' @param TempE Temperature at height eyes (C, default=15C), double
 #' @param PresE Airpressure at height eyes (mbar, default=1013.25mbar), double
 #'
-#' @return TopoAlt de Topocentric altitude (deg), double
+#' @return TopoAlt thee Topocentric altitude (deg), double
 #'
 #' @examples
 #' TopoAltfromAppAlt(0,15,1013.25)
-#' [1] -0.5598886443
+#' #-0.5598886443
 #' 
 #' TopoAltfromAppAlt(c(-4,-0.5,0,2,20))
-#' [1] -4.0000000000 -1.1817229649 -0.5598886443  1.7010159897 19.9561578991
+#' #-4.0000000000 -1.1817229649 -0.5598886443  1.7010159897 19.9561578991
 #'
 #' @author Victor Reijs, \email{lists@@archaeocosmology.org}
 #' @references Bennett, G.G. 1982. 'The calculation of astronomical refraction in marine navigation', 
@@ -189,18 +189,18 @@ S_TopoAltfromAppAlt <- function (AppAlt,
 #' refractions will not be very accurate (say with 0.5deg).
 #' Below a Topocentric altitude of -3.5deg, the Apparent altitude is made equal.
 #'
-#' @param AppAlt the Topocentric altitude (deg), double
+#' @param TopoAlt the Topocentric altitude (deg), double
 #' @param TempE Temperature at height eyes (C, default=15C), double
 #' @param PresE Airpressure at height eyes (mbar, default=1013.25mbar), double
 #'
-#' @return TopoAlt de Apparent altitude (deg), double
+#' @return AppAlt de Apparent altitude (deg), double
 #'
 #' @examples
 #' AppAltfromTopoAlt(0,15,1013.25)
-#' [[1] 0.4721438916
+#' #0.4721438916
 #' 
 #' AppAltfromTopoAlt(c(-4,-0.5,0,2,20))
-#' [1] -4.00000000000  0.04956607457  0.47214389159  2.27870879488 20.04373829337
+#' #-4.00000000000  0.04956607457  0.47214389159  2.27870879488 20.04373829337
 #'
 #' @author Victor Reijs, \email{lists@@archaeocosmology.org}
 #' @references Bennett, G.G. 1982. 'The calculation of astronomical refraction in marine navigation', 
@@ -989,7 +989,8 @@ S_REarth <- function (Lat = AverageLat) {
 #' @return RiseAngle the apparent rise angle (deg), double
 #'
 #' @examples
-#' RiseAngle(55,12,0,10,1000,"moonavg",0) -> 28.33387
+#' RiseAngle(55,12,0,10,1000,"moonavg",0) 
+#' #28.33387469
 #'
 #' @export
 RiseAngle <-

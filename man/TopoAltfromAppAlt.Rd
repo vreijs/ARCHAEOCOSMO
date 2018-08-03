@@ -14,7 +14,7 @@ TopoAltfromAppAlt(AppAlt, TempE = TempDefault, PresE = PressureDefault)
 \item{PresE}{Airpressure at height eyes (mbar, default=1013.25mbar), double}
 }
 \value{
-TopoAlt de Topocentric altitude (deg), double
+TopoAlt thee Topocentric altitude (deg), double
 }
 \description{
 The astronomical refraction is determined using the Sinclair's formula. This formula is based
@@ -25,10 +25,10 @@ Below an Apparent altitude of -3.5deg, the Topocentric altitude is made equal.
 }
 \examples{
 TopoAltfromAppAlt(0,15,1013.25)
-[1] -0.5598886443
+#-0.5598886443
 
 TopoAltfromAppAlt(c(-4,-0.5,0,2,20))
-[1] -4.0000000000 -1.1817229649 -0.5598886443  1.7010159897 19.9561578991
+#-4.0000000000 -1.1817229649 -0.5598886443  1.7010159897 19.9561578991
 
 }
 \references{

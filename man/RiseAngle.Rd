@@ -29,6 +29,7 @@ RiseAngle the apparent rise angle (deg), double
 blabla
 }
 \examples{
-RiseAngle(55,12,0,10,1000,"moonavg",0) -> 28.33387
+RiseAngle(55,12,0,10,1000,"moonavg",0) 
+#28.33387469
 
 }
