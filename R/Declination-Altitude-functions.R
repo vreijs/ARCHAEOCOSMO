@@ -978,13 +978,13 @@ S_REarth <- function (Lat = AverageLat) {
 #'
 #' blabla
 #'
-#' @param Lat the apparent altitude (deg), double precision vector
-#' @param GeoDec the geocentric declination (deg), double precision  vector
-#' @param AppAlt the apparent altitude (deg), double precision vector
-#' @param TempE Temperature at Height eyes (C), double precision vector and default 15C
-#' @param PresE Airpressure at height eye (mbar), double precision vector and default 1013.25mbar
-#' @param ObjectDist the name of celestial object ("moonavg","moonnearest","moonfurthest","sun","star","topo"]), charector precision vector
-#' @param Rim the place to be taken on the clestial object's disc (bottom=-1, centre=0, top=1), precision integer vector and default middle of disc
+#' @param Lat the apparent altitude (deg), double  vector
+#' @param GeoDec the geocentric declination (deg), double  vector
+#' @param AppAlt the apparent altitude (deg), double vector
+#' @param TempE Temperature at Height eyes (C), default=15C, double vector
+#' @param PresE Airpressure at height eye (mbar, default=1013.25mbar), double vector
+#' @param ObjectDist the name of celestial object ("moonavg","moonnearest","moonfurthest","sun","star","topo"]), charector vector
+#' @param Rim the place to be taken on the clestial object's disc (default=0), integer (bottom=-1, centre=0, top=1) vector
 #'
 #' @return RiseAngle the apparent rise angle (deg), double
 #'
@@ -1112,6 +1112,29 @@ S_AzifromAppAlt <-
   }
 
 ###################################################################
+TopoDecfromSolarLunarEvent <-
+  function (JDNDays,
+            Object,
+            NS) {
+    functionvector <-
+      data.frame(JDNDays,
+                 Object,
+                 NS,
+                 stringsAsFactors = FALSE)
+#    print(functionvector)
+    ResultVector <- c(0)
+    for (i in 1:nrow(functionvector))
+    {
+      ResultVector[i] = S_TopoDecfromSolarLunarEvent(
+        functionvector$JDNDays[i],
+        functionvector$Object[i],
+        functionvector$NS[i]
+      )
+    }
+    return(ResultVector)
+  }
+
+###################################################################
 S_TopoDecfromSolarLunarEvent <- function(JDNDays, Object, NS) {
     
     # ' JDNDays [Day]
@@ -1121,6 +1144,32 @@ S_TopoDecfromSolarLunarEvent <- function(JDNDays, Object, NS) {
     
     Angle <- S_GeoDecfromSolarLunarEvent(JDNDays, Object, NS,"topo")
 return(Angle)}
+
+###################################################################
+GeoDecfromSolarLunarEvent <-
+  function (JDNDays,
+            Object,
+            NS,
+            DeclType = "geo") {
+    functionvector <-
+      data.frame(JDNDays,
+                 Object,
+                 NS, DeclType,
+                 stringsAsFactors = FALSE)
+#    print(functionvector)
+    ResultVector <- c(0)
+    for (i in 1:nrow(functionvector))
+    {
+      ResultVector[i] = S_GeoDecfromSolarLunarEvent(
+        functionvector$JDNDays[i],
+        functionvector$Object[i],
+        functionvector$NS[i],
+        functionvector$DeclType[i]
+      )
+    }
+    return(ResultVector)
+  }
+
 
 ###################################################################
 #there is a swap of the NS and DeclType arguments compared to VBA code!
@@ -1136,10 +1185,10 @@ S_GeoDecfromSolarLunarEvent <-
     Object <- tolower(Object)
     Angle <- S_Sunobliquity(JDNDays)
     if (Object == "moonmajor") {
-      Angle = Angle + (MoonInclination + Perturbation * MoonPerturb)
+      Angle <- Angle + (MoonInclination + Perturbation * MoonPerturb)
     }
     if (Object == "moonminor") {
-      Angle = Angle - (MoonInclination + Perturbation * MoonPerturb)
+      Angle <- Angle - (MoonInclination + Perturbation * MoonPerturb)
     }
     if (NS == 0) {
       Angle = -Angle
@@ -1149,7 +1198,7 @@ S_GeoDecfromSolarLunarEvent <-
         Angle <- Angle - MoonAvgPar
       }
       else {
-        Angle = Angle - SunPar
+        Angle <- Angle - SunPar
       }
     }
     return(Angle)
@@ -1394,3 +1443,17 @@ TopoAltfromDip(3000, 5) + 1.755515
 AppAltfromDip(3000, 5, 15, 1013.25, 0.0065) + 1.589868
 AppAltfromHeights(5, 3000, 2000, 15, 1013.25, 0.0065) - 56.25335
 TopoAltfromHeights(5, 3000, 2000) - 56.25059
+
+data(RugglesRSC)
+curv1 <- curvigram(RugglesRSC$Dec,1)
+curv2 <- curvigram(RugglesRSC$Dec,2)
+moontdecVR <- TopoDecfromSolarLunarEvent(JDutfromDate(-2000),c("moonmajor","moonminor","moonminor","moonmajor"),c(0,0,1,1))
+lunar <- sky.objects('moon',epoch=-2000,col='red',lty=2)
+lunarVR=lunar
+plotCurv(curv1,lunar,xlim=c(-45,-5),main="1deg uncertainty")
+plotCurv(curv2,lunar,xlim=c(-45,-5),main="2deg uncertainty")
+lunarVR$decs[1:4] <- moontdecVR
+plotCurv(curv1,lunarVR,xlim=c(-45,-5),main="1deg uncertainty")
+plotCurv(curv2,lunarVR,xlim=c(-45,-5),main="2deg uncertainty")
+
+
