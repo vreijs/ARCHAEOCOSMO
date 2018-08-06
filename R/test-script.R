@@ -22,7 +22,7 @@ Sunobliquity(c(170686)) - 24.12502276
 JDutfromDate("3.0.0.0.0") - 1016283
 JDutfromDate("35/12/1") - 1734175.5
 
-#testign code of curvigram
+#testing code of curvigram
 library("skyscapeR")
 data(RugglesRSC)
 curv1 <- curvigram(RugglesRSC$Dec,1)
@@ -44,3 +44,4 @@ plotCurv(curv1,lunar,xlim=c(-45,-5),main=titlestring1g)
 plotCurv(curv1,lunarVR,xlim=c(-45,-5),main=titlestring1t)
 plotCurv(curv2,lunar,xlim=c(-45,-5),main=titlestring2g)
 plotCurv(curv2,lunarVR,xlim=c(-45,-5),main=titlestring2t)
+

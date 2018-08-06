@@ -1194,16 +1194,10 @@ S_GeoDecfromSolarLunarEvent <-
       Angle = -Angle
     }
     if (DeclType == "topo") {
-      if (Object != "solstice") {
-        Angle <- Angle - MoonAvgPar
-      }
-      else {
-        Angle <- Angle - SunPar
-      }
+         Angle <- S_TopoDecfromGeoDec(Angle, Object)
     }
     return(Angle)
   }
-
 
 ###################################################################
 S_HourAngle <- function(TopoAlt, TopoDec, Lat) {
@@ -1426,4 +1420,54 @@ S_GeoAltfromGeoDecHour <- function(Lat, GeoDec, GeoHour) {
   Angle = asin(sin(GeoDeci) * sin(Lati) + cos(GeoDeci) * cos(GeoHouri) * cos(Lati))
   Angle = Angle * Rad2Deg
   return(Angle)
+}
+
+###################################################################
+TopoDecfromGeoDec <- function (GeoDec, ObjectDist) {
+
+  
+  functionvector <- data.frame(GeoDec, ObjectDist,stringsAsFactors = FALSE)
+ # print(functionvector)
+  ResultVector <- c(0)
+  for (i in 1:nrow(functionvector)) {
+      ResultVector[i] = S_TopoDecfromGeoDec(functionvector$GeoDec[i],functionvector$ObjectDist[i])
+  }
+  return(ResultVector)
+}
+
+##################################################################
+S_TopoDecfromGeoDec <- function(GeoDec, ObjectDist) {
+  # GeoDec [deg]
+  # ObjectDist [sun,moonavg,moonnearest,moonfurthest,star
+  # TopoDecfromGeoDec [deg]
+  
+  # print(ObjectDist)
+  switch ( ObjectDist,
+    "moonnearest" = {
+      Angle <- GeoDec - MoonMinPar
+    },
+    "moonfurthest" = {
+      Angle <- GeoDec - MoonMaxPar
+    },
+    "moonavg" = {
+      Angle <- GeoDec - MoonAvgPar
+    },
+    "moonmajor" = {
+      Angle <- GeoDec - MoonAvgPar
+    },
+    "moonminor" = {
+      Angle <- GeoDec - MoonAvgPar
+    },
+    "sun" = {
+      Angle <- GeoDec - SunPar
+    },
+    "solstice" = {
+      Angle <- GeoDec - SunPar
+    },
+    "star" = {
+      Angle <- GeoDec
+    }
+  )
+
+   return (Angle)
 }
