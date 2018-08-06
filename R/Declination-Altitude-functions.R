@@ -1427,33 +1427,3 @@ S_GeoAltfromGeoDecHour <- function(Lat, GeoDec, GeoHour) {
   Angle = Angle * Rad2Deg
   return(Angle)
 }
-
-
-#Testresults
-TopoAltfromAppAlt(0, 15, 1013.25) + 0.5598886
-AppAltfromTopoAlt(0, 15, 1013.25) - 0.4721439
-GeoAltfromTopoAlt(-0.559888644263346, "moonavg") - 0.3922204
-TopoAltfromGeoAlt(0, "moonavg") + 0.952
-ParallaxfromTopoAlt(-0.559888644263346, "moonavg") - 0.9521091
-ParallaxfromGeoAlt(0, "moonavg") - 0.952
-S_Maxpar("moonavg") - 0.952
-GeoDecfromAppAlt(53, 0, 66, 0, "moonavg", 15, 1013.25) - 14.49181
-GeoDecfromGeoAlt(53, 0, 66, 0) - 14.16885
-TopoAltfromDip(3000, 5) + 1.755515
-AppAltfromDip(3000, 5, 15, 1013.25, 0.0065) + 1.589868
-AppAltfromHeights(5, 3000, 2000, 15, 1013.25, 0.0065) - 56.25335
-TopoAltfromHeights(5, 3000, 2000) - 56.25059
-
-data(RugglesRSC)
-curv1 <- curvigram(RugglesRSC$Dec,1)
-curv2 <- curvigram(RugglesRSC$Dec,2)
-moontdecVR <- TopoDecfromSolarLunarEvent(JDutfromDate(-2000),c("moonmajor","moonminor","moonminor","moonmajor"),c(0,0,1,1))
-lunar <- sky.objects('moon',epoch=-2000,col='red',lty=2)
-lunarVR=lunar
-plotCurv(curv1,lunar,xlim=c(-45,-5),main="1deg uncertainty")
-plotCurv(curv2,lunar,xlim=c(-45,-5),main="2deg uncertainty")
-lunarVR$decs[1:4] <- moontdecVR
-plotCurv(curv1,lunarVR,xlim=c(-45,-5),main="1deg uncertainty")
-plotCurv(curv2,lunarVR,xlim=c(-45,-5),main="2deg uncertainty")
-
-

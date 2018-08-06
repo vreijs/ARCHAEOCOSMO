@@ -1435,23 +1435,3 @@ S_MayaDatefromJDut <-
     }
     return(Date)
   }
-
-
-
-options(digits = 10)
-JDs <- c(123456, 55, 242345, 1000)
-SolarDayOpt(c(JDutfromDate(2000))) - 24.00000017
-Sunobliquity(c(170686)) - 24.12502276
-JDutfromDate("3.0.0.0.0") - 1016283
-JDutfromDate("35/12/1") - 1734175.5
-
-
-# using http://stat.ethz.ch/R-manual/R-devel/library/base/html/dynload.html
-#x <- dyn.load("swedll32.dll")
-#x
-#getLoadedDLLs()
-#getDLLRegisteredRoutines(x)
-#using https://darrenjw.wordpress.com/2010/12/30/calling-c-code-from-r/
-#y <- .C("swe_get_tid_acc")
-#b <- .C("_swe_deltat@8",as.double(123456))
-#z <- .C("_swe_get_tid_acc@0")
