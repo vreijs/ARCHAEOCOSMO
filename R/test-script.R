@@ -15,7 +15,7 @@ AppAltfromDip(3000, 5, 15, 1013.25, 0.0065) + 1.589868
 AppAltfromHeights(5, 3000, 2000, 15, 1013.25, 0.0065) - 56.25335
 TopoAltfromHeights(5, 3000, 2000) - 56.25059
 
-#testreult for Periodicy
+#testreult for Periodic
 JDs <- c(123456, 55, 242345, 1000)
 SolarDayOpt(c(JDutfromDate(2000))) - 24.00000017
 Sunobliquity(c(170686)) - 24.12502276
