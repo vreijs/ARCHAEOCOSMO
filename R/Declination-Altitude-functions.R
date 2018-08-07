@@ -18,12 +18,7 @@
 #    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #
 # The author (web.victor.reijs@gmail.com ) is interested in constructive feedback.
-# http://www.iol.ie/~geniet/eng/archaeocosmology.htm
-#
-# A few functions are linked from Swiss Ephemeris (http://www.astro.com/swisseph/):
-#   ' ObjectLoc, PlanetStar and DeltaTSE
-# If one does not download Swiss Ephemeris; ObjectLoc and HeliacalAngle, etc.
-# are the functions that will not work (the rest is still there)
+# http://archaeocosmology.org/eng/archaeocosmology.htm
 #
 # Explantion of the procdures can also be found at
 # http://www.archaeocosmology.org/eng/archaeocosmoprocedures.htm
@@ -1424,7 +1419,6 @@ S_GeoAltfromGeoDecHour <- function(Lat, GeoDec, GeoHour) {
 
 ###################################################################
 TopoDecfromGeoDec <- function (GeoDec, ObjectDist) {
-
   
   functionvector <- data.frame(GeoDec, ObjectDist,stringsAsFactors = FALSE)
  # print(functionvector)
@@ -1466,8 +1460,8 @@ S_TopoDecfromGeoDec <- function(GeoDec, ObjectDist) {
     },
     "star" = {
       Angle <- GeoDec
-    }
+    },
+    {Angle <- NA}
   )
-
    return (Angle)
 }
