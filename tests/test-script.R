@@ -30,7 +30,7 @@ curv2 <- curvigram(RugglesRSC$Dec,2)
 datenow<- -4000
 moontdecVR <- TopoDecfromSolarLunarEvent(JDutfromDate(datenow),c("moonmajor","moonminor","moonminor","moonmajor"),c(0,0,1,1))
 suntdecVR <- TopoDecfromSolarLunarEvent(JDutfromDate(datenow),c("solstice","solstice"),c(0,1))
-lunar <- sky.objects(c('moon','sun'),epoch=datenow,col=c("red","blue"),lty=c(2,2))
+lunar <- sky.objects(c('moon','sun'),epoch=datenow,col=c("red","blue"),lty=c(3,2))
 lunar
 lunarVR=lunar
 lunarVR$decs[1:4] <- moontdecVR
