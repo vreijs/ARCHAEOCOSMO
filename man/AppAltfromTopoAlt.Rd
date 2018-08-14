@@ -4,7 +4,8 @@
 \alias{AppAltfromTopoAlt}
 \title{Determine Apparent altitude from Topocentric altitude}
 \usage{
-AppAltfromTopoAlt(TopoAlt, TempE = TempDefault, PresE = PressureDefault)
+AppAltfromTopoAlt(TopoAlt, TempE = TempDefault,
+  PresE = PressureDefault)
 }
 \arguments{
 \item{TopoAlt}{the Topocentric altitude (deg), double}
