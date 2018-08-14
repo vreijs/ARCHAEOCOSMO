@@ -4,23 +4,23 @@
 \alias{RiseAngle}
 \title{Determine the rise angle of the celestial object}
 \usage{
-RiseAngle(Lat, GeoDec, AppAlt, TempE = TempDefault, PresE = PressureDefault,
-  ObjectDist, Rim = RimDefault)
+RiseAngle(Lat, GeoDec, AppAlt, TempE = TempDefault,
+  PresE = PressureDefault, ObjectDist, Rim = RimDefault)
 }
 \arguments{
-\item{Lat}{the apparent altitude (deg), double precision vector}
+\item{Lat}{the apparent altitude (deg), double  vector}
 
-\item{GeoDec}{the geocentric declination (deg), double precision  vector}
+\item{GeoDec}{the geocentric declination (deg), double  vector}
 
-\item{AppAlt}{the apparent altitude (deg), double precision vector}
+\item{AppAlt}{the apparent altitude (deg), double vector}
 
-\item{TempE}{Temperature at Height eyes (C), double precision vector and default 15C}
+\item{TempE}{Temperature at Height eyes (C), default=15C, double vector}
 
-\item{PresE}{Airpressure at height eye (mbar), double precision vector and default 1013.25mbar}
+\item{PresE}{Airpressure at height eye (mbar, default=1013.25mbar), double vector}
 
-\item{ObjectDist}{the name of celestial object ("moonavg","moonnearest","moonfurthest","sun","star","topo"]), charector precision vector}
+\item{ObjectDist}{the name of celestial object ("moonavg","moonnearest","moonfurthest","sun","star","topo"]), charector vector}
 
-\item{Rim}{the place to be taken on the clestial object's disc (bottom=-1, centre=0, top=1), precision integer vector and default middle of disc}
+\item{Rim}{the place to be taken on the clestial object's disc (default=0), integer (bottom=-1, centre=0, top=1) vector}
 }
 \value{
 RiseAngle the apparent rise angle (deg), double
