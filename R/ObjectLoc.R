@@ -67,7 +67,7 @@ S_ObjectLoc <-
                          SE_EQU2HOR,
                          geopos,
                          PresE,
-                         TempE)
+                         TempE,xin)
       }
       #change altitude due to form of the moon
       #need to add also change to azimuth (depending on position sun!)
@@ -77,13 +77,13 @@ S_ObjectLoc <-
       #        xaz(0) = xaz(0) + 0.707 * AvgRadiusMoon / 2 #new
       #} 'new
       if (Angle == 0) {
-        Location <- xaz[1]
+        Location <- i$xaz[2]
       }
       if (Angle == 4) {
         Location <- AppAltfromTopoAlt(xaz[1], TempE, PresE)
       }
       if (Angle == 1) {
-        Location <- xaz[0] + 180
+        Location <- i$xaz[2] + 180
         if (Location >= 360) {
           Location <- Location - 360
         }
