@@ -36,7 +36,7 @@ SE_SUN <- as.integer(0)
 
 #determine the type of emphemeris used
  Ephemeris <- SEFLG_SWIEPH
- JPLtype <- "de200.eph"
+ JPLtype <- "de431.eph"
 
 # bits for data conversion with swe_azalt() and swe_azalt_rev()
 SE_EQU2HOR   <- as.integer( 1)

@@ -61,7 +61,7 @@ S_ObjectLoc <-
     # ' ObjectLoc [deg]
     
  #   ObjectName <- tolower(ObjectName)
-    Loc <-as.double(0)
+ #   Loc <-as.double(0)
     iflag <- Ephemeris
     if ((Angle != 8)
         && (Angle != 9)) {
