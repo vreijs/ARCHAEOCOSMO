@@ -9,15 +9,18 @@ ObjectLoc <- function (JDNDaysUT,
                        ObjectName,
                        Angle,
                        NoDeltaT = 1) {
-  functionvector <- data.frame(JDNDaysUT,
-                               Lat,
-                               Longitude,
-                               HeightEye,
-                               TempE,
-                               PresE,
-                               ObjectName,
-                               Angle,
-                               NoDeltaT, stringsAsFactors = FALSE)
+  functionvector <- data.frame(
+    JDNDaysUT,
+    Lat,
+    Longitude,
+    HeightEye,
+    TempE,
+    PresE,
+    ObjectName,
+    Angle,
+    NoDeltaT,
+    stringsAsFactors = FALSE
+  )
   print(functionvector)
   ResultVector <- c(0)
   for (i in 1:nrow(functionvector))
@@ -44,8 +47,8 @@ S_ObjectLoc <-
            Lat,
            Longitude,
            HeightEye,
-           TempE=TempDefault,
-           PresE=PressureDefault,
+           TempE = TempDefault,
+           PresE = PressureDefault,
            ObjectName,
            Angle,
            NoDeltaT = 1) {
@@ -60,8 +63,8 @@ S_ObjectLoc <-
     # ' NoDeltaT 1=no DeltaT 0=DeltaT to remove
     # ' ObjectLoc [deg]
     
- #   ObjectName <- tolower(ObjectName)
- #   Loc <-as.double(0)
+    #   ObjectName <- tolower(ObjectName)
+    #   Loc <-as.double(0)
     iflag <- Ephemeris
     if ((Angle != 8)
         && (Angle != 9)) {
@@ -91,25 +94,26 @@ S_ObjectLoc <-
       i <- swephR:::swe_fixstar(ObjectName, tjd_tt, iflag)
     }
     if ((Angle == 2) || (Angle == 5) || (Angle == 8)) {
-    print("output swe_calc (i): ")
-      print (i)
-      print(paste("value of i$xx[2]: ",i$xx[2]))
-      Loc <- i$xX[2]
-      print(paste("Loc <- i$xx[2]: ",Loc))
+      # print("output swe_calc (i): ")
+      # print (i)
+      # print(
+      #   paste("value of i$xx[2]: ", as.double(i$xx[2])))
+        Loc <- as.double(i$xx[2])
+        # print(paste("Loc (<- i$xx[2]): ", Loc))
     }
     else {
       if ((Angle == 3)
           || (Angle == 6) || (Angle == 9)) {
-        Loc <- i$xX[1]
+        Loc <- i$xx[1]
       }
       else {
         xin <- i$xx[1:2]
         i <- swephR:::swe_azalt(JDNDaysUT,
-                         SE_EQU2HOR,
-                         geopos,
-                         PresE,
-                         TempE,
-                         xin)
+                                SE_EQU2HOR,
+                                geopos,
+                                PresE,
+                                TempE,
+                                xin)
       }
       #change altitude due to form of the moon
       #need to add also change to azimuth (depending on position sun!)
@@ -125,7 +129,7 @@ S_ObjectLoc <-
         Loc <- AppAltfromTopoAlt(i$xaz[2], TempE, PresE)
       }
       if (Angle == 1) {
-        Loc <- i$xaz[2] + 180
+        Loc <- i$xaz[1] + 180
         if (Loc >= 360) {
           Loc <- Loc - 360
         }
