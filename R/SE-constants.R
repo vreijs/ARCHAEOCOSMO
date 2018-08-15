@@ -1,5 +1,5 @@
 # Swiss emphemeris constants
-DirEphemeris <- "C:\\ARCHAEOCOSMO\\ephe"
+DirEphemeris <- ""
 
 # planet and body numbers for swe_calc()
 SE_SUN <- as.integer(0)

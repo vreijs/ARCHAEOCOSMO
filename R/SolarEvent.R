@@ -1,3 +1,21 @@
+SolarEvent <-   function(JDNDaysUT, SolarEventType, NoDeltaT = 0) {
+  functionvector <- data.frame(
+    JDNDaysUT, SolarEventType, NoDeltaT
+  )
+  print(functionvector)
+  ResultVector <- c(0)
+  for (i in 1:nrow(functionvector))
+  {
+    ResultVector[i] <- S_SolarEvent(
+      functionvector$JDNDaysUT[i],
+      functionvector$SolarEventType[i],
+      functionvector$NoDeltaT[i]
+    )
+  }
+  return(ResultVector)
+}
+
+
 ###################################################################
 S_SolarEvent <- function(JDNDaysUT, SolarEventType, NoDeltaT = 0) {
   # ' JDNDaysUT [Days]
@@ -5,9 +23,7 @@ S_SolarEvent <- function(JDNDaysUT, SolarEventType, NoDeltaT = 0) {
   # ' NoDeltaT (0,1)
   # ' SolarEvent [Days]
   
-  # Dim X(6) As Double
-  # Dim serr As String
-  
+   
   iflag <- Ephemeris
   if (NoDeltaT == 1) {
     Tijd <- JDNDaysUT
@@ -25,7 +41,7 @@ S_SolarEvent <- function(JDNDaysUT, SolarEventType, NoDeltaT = 0) {
     difference <- difference + Y2D
   }
   if (difference == 0) {
-    SolarEvent <- Tijd
+    Day<- Tijd
   }
   else {
     #xR=T1 Xl=T2
@@ -42,7 +58,7 @@ S_SolarEvent <- function(JDNDaysUT, SolarEventType, NoDeltaT = 0) {
     if ((LongGoal == 0) && (i$xx[1] > 180)) {
       YL = -(i$xx[1] - 360)
     }
-    if ((YL * YR) != 0) {
+    if ((YL * YR) <= 0) {
       while (abs(XR - XL) > epsilon / 100) {
         #Calculate midpoint of domain
         Xm = (XR + XL) / 2
@@ -71,11 +87,11 @@ S_SolarEvent <- function(JDNDaysUT, SolarEventType, NoDeltaT = 0) {
     }
     Day <- Xm
   }
-  if ((NoDeltaT == 1) || (Day = 0)) {
-    Day = Day
+  if ((NoDeltaT == 1) || (Day == 0)) {
+    Day <- Day
   }
   else {
-    Day <- Day - DeltaT(Day) / D2S
+    Day <- Day - S_DeltaT(Day) / D2S
   }
   return(Day)
 }

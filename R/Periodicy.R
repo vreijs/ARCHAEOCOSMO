@@ -124,6 +124,29 @@ JDutfromDate <- function (DateString,
 }
 
 ###################################################################
+DatefromJDut <- function (JDNDaysUT,
+                          Argument = 0,
+                          CalType = 0) {
+  functionvector <-
+    data.frame(JDNDaysUT,
+               Argument,
+               CalType)
+  
+  #    print(functionvector)
+  ResultVector <- c(0)
+  for (i in 1:nrow(functionvector))
+  {
+    ResultVector[i] = S_DatefromJDut(
+      functionvector$JDNDaysUT[i],
+      functionvector$Argument[i],
+      functionvector$CalType[i]
+    )
+  }
+  return(ResultVector)
+}
+
+
+###################################################################
 S_DatefromJDut <- function(JDNDaysUT,
                            Argument = 0,
                            CalType = 0) {
