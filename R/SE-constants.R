@@ -42,31 +42,30 @@ SE_SUN <- as.integer(0)
 SE_EQU2HOR   <- as.integer( 1)
 
 # ' for swe_refrac()
-# Const SE_TRUE_TO_APP        As Long = 0
-# Const SE_APP_TO_TRUE        As Long = 1
-# 
+SE_TRUE_TO_APP   <-as.integer( 0)
+SE_APP_TO_TRUE    <-as.integer(1)
+
 # ' indices for swe_rise_trans()
-# Const SE_CALC_RISE      As Long = 1
-# Const SE_CALC_SET       As Long = 2
-# Const SE_CALC_MTRANSIT      As Long = 4
-# Const SE_CALC_ITRANSIT      As Long = 8
-# Const SE_BIT_DISC_BOTTOM      As Long = 8192
-# Const SE_BIT_DISC_CENTER        As Long = 256 '/* to be added to SE_CALC_RISE/SET */
+SE_CALC_RISE  <-as.integer(1)
+SE_CALC_SET      <-as.integer(2)
+SE_CALC_MTRANSIT      <-as.integer(4)
+SE_CALC_ITRANSIT     <-as.integer(8)
+SE_BIT_DISC_BOTTOM     <-as.integer(8192)
+SE_BIT_DISC_CENTER       <-as.integer(256) #/* to be added to SE_CALC_RISE/SET */
 # '/* if rise or set of disc center is */
 #   '/* requried, otherwise upper rim*/
-# Const SE_BIT_NO_REFRACTION      As Long = 512 '/* to be added to SE_CALC_RISE/SET, */
+SE_BIT_NO_REFRACTION     <-as.integer(512) #/* to be added to SE_CALC_RISE/SET, */
 #   '/* if refraction is not to be considered */
-# 
+ 
 # 'Heliacal event related constants
-# Const SE_HELIACAL_LONG_SEARCH       As Long = 128 ' e.g. for mercury, if no event found, try next synodic period
-# Const SE_HELIACAL_HIGH_PRECISION    As Long = 256 ' if not set, program runs in faster low precision mode
-# Const SE_HELFLAG_NO_DETAILS         As Long = 1024 'return only the optimum time
-# Const SE_HELIACAL_AVKIND_VLM        As Long = 0  'using VisLimMagn
-# Const SE_HELIACAL_AVKIND_VR         As Long = 66560 'using AV method
-# Const SE_HELIACAL_AVKIND_PTO        As Long = 2 ^ 16 '4096 'using AV method
-# Const SE_HELIACAL_AVKIND_MIN7       As Long = 2 ^ 17 '8192 'using AV method
-# Const SE_HELIACAL_AVKIND_MIN9       As Long = 2 ^ 18 '16384 'using AV method
-# Const SE_HELIACAL_OPTICAL_PARAMS    As Long = 512 'use the optical parameters
-# Const SE_HELFLAG_VISLIM_NOMOON      As Long = 8192
-# Const SE_HELFLAG_VISLIM_DARK        As Long = 4096
-# 
+HELIACAL_LONG_SEARCH    <-as.integer(128) # ' e.g. for mercury, if no event found, try next synodic period
+SE_HELIACAL_HIGH_PRECISION <-as.integer(256) # if not set, program runs in faster low precision mode
+SE_HELFLAG_NO_DETAILS         <-as.integer(1024) #return only the optimum time
+SE_HELIACAL_AVKIND_VLM         <-as.integer(0)  #using VisLimMagn
+SE_HELIACAL_AVKIND_VR          <-as.integer(66560) #using AV method
+SE_HELIACAL_AVKIND_PTO         <-as.integer(2 ^ 16) #using AV method
+SE_HELIACAL_AVKIND_MIN7       <-as.integer(2 ^ 17) #using AV method
+SE_HELIACAL_AVKIND_MIN9      <-as.integer(2 ^ 18) #using AV method
+SE_HELIACAL_OPTICAL_PARAMS     <-as.integer(512) #use the optical parameters
+SE_HELFLAG_VISLIM_NOMOON       <-as.integer(8192)
+SE_HELFLAG_VISLIM_DARK        <-as.integer(4096)
