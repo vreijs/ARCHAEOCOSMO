@@ -27,6 +27,11 @@
 #software version
 Version = "1.01"
 
+#optimization delta
+epsilon <- 0.001
+deltaJD <- 0.00001
+
+
 #default waardes
 TempDefault <- 15
 PressureDefault <- 1013.25
