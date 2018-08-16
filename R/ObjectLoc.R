@@ -178,4 +178,26 @@ S_DeterObject <- function(ObjectNamei) {
   return(Obj)
 }
 
+###################################################################
+DeltaTSE <- function(JDNDays, COD = 0) {
+  # ' JDNDays [Days]
+  # ' COD [msec/cy]
+  # ' DeltaTSE [Sec]
+  
+  if (COD == 0) {
+    # from Swiss Emphemeris
+    iflag <- Ephemeris
+    Tijd <- swe_deltat_ex(JDNDays, iflag) 
+    Sec <-Tijd$return * D2S
+    #       Sec <- swe_deltat(JDNDays) * D2S
+    #refer the DeltaT back to the -26 "/cy^2
+    #        Sec <- DeltaTndot(JDNDays, DeltaTSE, ndot, -26)
+  }
+  else {
+    # Determined by V. Reijs
+    OffSetYear <- (JDutfromDate(StartYear, 0) - JDNDays) / 365.25
+    Sec <- (OffSetYear ^ 2 / 100 / 2 * COD * Y2D) / 1000
+  }
+  return (Sec)
+}
 
