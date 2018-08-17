@@ -14,7 +14,7 @@ SE_NEPTUNE <- as.integer(8)
 SE_PLUTO   <- as.integer(9)
 SE_EARTH   <- as.integer(14)
 
-# #solar eclipse types
+# eclipse types
 SE_ECL_CENTRAL   <- as.integer(1)
 SE_ECL_NONCENTRAL   <- as.integer(2)
 SE_ECL_TOTAL       <- as.integer(4)
