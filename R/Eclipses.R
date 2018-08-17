@@ -24,7 +24,7 @@ S_EclipseWhenUT <-
     # Dim attr(20) As Double
     # Dim geopos(2) As Double
     # Dim serr As String
-    # Dim DateDeltaT(2) As Double
+    DateDeltaT<-0
     
     EventPhase <- tolower(EventPhase)
     if (EventPhase == "g") {
@@ -167,7 +167,7 @@ S_EclipseWhenUT <-
                           ObjectName,
                           0)
             locpenumbralend <-
-              ObjectLoc(i$tret[8],
+              S_ObjectLoc(i$tret[8],
                         Lat,
                         Longitude,
                         HeightEye,
@@ -236,9 +236,9 @@ S_EclipseWhenUT <-
       }
     }
     else {
-      DateDeltaT[1] <- ii$tret[EventPhase + 1]
+      DateDeltaT[1] <- i$tret[EventPhase + 1]
     }
     DateDeltaT[2] <- DeltaT(DateDeltaT[1])
-    Eclipse <- DateDeltaT
+    Eclipse <- DateDeltaT[1]
     return(Eclipse)
   }
