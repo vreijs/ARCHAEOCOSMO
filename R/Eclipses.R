@@ -1,3 +1,44 @@
+EclipseWhenUT <- function (JDNDaysUT,
+                           Lat,
+                           Longitude,
+                           HeightEye,
+                           TempE = TempDefault,
+                           PresE = PressureDefault,
+                           ObjectName,
+                           EclipseType,
+                           AppAlt = 0,
+                           EventPhase = "g") {
+  functionvector <- data.frame(
+    JDNDaysUT,
+    Lat,
+    Longitude,
+    HeightEye,
+    TempE,
+    PresE,
+    ObjectName,
+    EclipseType,
+    AppAlt,
+    EventPhase,
+    stringsAsFactors = FALSE
+  )
+  print(functionvector)
+  ResultVector <- c(0)
+  for (i in 1:nrow(functionvector))
+  {
+    ResultVector[i] <- S_EclipseWhenUT(
+      functionvector$JDNDaysUT[i],
+      functionvector$Lat[i],
+      functionvector$Longitude[i],
+      functionvector$HeightEye[i],
+      functionvector$TempE[i],
+      functionvector$PresE[i],
+      functionvector$ObjectName[i],
+      functionvector$EclipseType[i],  functionvector$AppAlt[i],      functionvector$EventPhase[i]
+    )
+  }
+  return(ResultVector)
+}
+
 ###################################################################
 S_EclipseWhenUT <-
   function(JDNDaysUT,
