@@ -2,7 +2,7 @@ SolarEvent <-   function(JDNDaysUT, SolarEventType, NoDeltaT = 0) {
   functionvector <- data.frame(
     JDNDaysUT, SolarEventType, NoDeltaT
   )
-  print(functionvector)
+#  print(functionvector)
   ResultVector <- c(0)
   for (i in 1:nrow(functionvector))
   {

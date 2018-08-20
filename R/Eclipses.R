@@ -272,7 +272,7 @@ S_EclipseWhenUT <-
         DateDeltaT[1] <- ii$attr[EventPhase - 10 + 1]
       }
       else {
-        ii <- swe_lun_eclipse_how(i$tret[1], iflag, geopos, FALSE)
+        ii <- swe_lun_eclipse_how(i$tret[1], iflag, geopos)
         DateDeltaT[1] <- ii$attr[EventPhase - 10 + 1]
       }
     }

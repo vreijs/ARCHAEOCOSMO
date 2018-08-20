@@ -21,7 +21,7 @@ RiseSet <-   function(JDNDaysUT,
     AppAlt,
     stringsAsFactors = FALSE
   )
-  print(functionvector)
+#  print(functionvector)
   ResultVector <- c(0)
   for (i in 1:nrow(functionvector))
   {

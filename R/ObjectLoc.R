@@ -21,7 +21,7 @@ ObjectLoc <- function (JDNDaysUT,
     NoDeltaT,
     stringsAsFactors = FALSE
   )
-  print(functionvector)
+  #print(functionvector)
   ResultVector <- c(0)
   for (i in 1:nrow(functionvector))
   {
@@ -90,16 +90,11 @@ S_ObjectLoc <-
       i <- swephR:::swe_calc(tjd_tt, Planet, iflag)
       #print (i)
     }
-    else {
+    else { 
       i <- swephR:::swe_fixstar(ObjectName, tjd_tt, iflag)
     }
     if ((Angle == 2) || (Angle == 5) || (Angle == 8)) {
-      # print("output swe_calc (i): ")
-      # print (i)
-      # print(
-      #   paste("value of i$xx[2]: ", as.double(i$xx[2])))
         Loc <- as.double(i$xx[2])
-        # print(paste("Loc (<- i$xx[2]): ", Loc))
     }
     else {
       if ((Angle == 3)

@@ -35,7 +35,7 @@ SEFLG_XYZ <- as.integer(4096)
 SEFLG_TOPOCTR <- as.integer(32768)
 
 #determine the type of emphemeris used
-Ephemeris <- SEFLG_SWIEPH
+Ephemeris <- SEFLG_MOSEPH
 JPLtype <- "de431.eph"
 
 # bits for data conversion with swe_azalt() and swe_azalt_rev()
@@ -59,19 +59,3 @@ SE_BIT_NO_REFRACTION     <-
   as.integer(512) #/* to be added to SE_CALC_RISE/SET, */
 #   '/* if refraction is not to be considered */
 
-# 'Heliacal event related constants
-HELIACAL_LONG_SEARCH    <-
-  as.integer(128) # ' e.g. for mercury, if no event found, try next synodic period
-SE_HELIACAL_HIGH_PRECISION <-
-  as.integer(256) # if not set, program runs in faster low precision mode
-SE_HELFLAG_NO_DETAILS         <-
-  as.integer(1024) #return only the optimum time
-SE_HELIACAL_AVKIND_VLM         <- as.integer(0)  #using VisLimMagn
-SE_HELIACAL_AVKIND_VR          <- as.integer(66560) #using AV method
-SE_HELIACAL_AVKIND_PTO         <- as.integer(2 ^ 16) #using AV method
-SE_HELIACAL_AVKIND_MIN7       <- as.integer(2 ^ 17) #using AV method
-SE_HELIACAL_AVKIND_MIN9      <- as.integer(2 ^ 18) #using AV method
-SE_HELIACAL_OPTICAL_PARAMS     <-
-  as.integer(512) #use the optical parameters
-SE_HELFLAG_VISLIM_NOMOON       <- as.integer(8192)
-SE_HELFLAG_VISLIM_DARK        <- as.integer(4096)
