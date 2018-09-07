@@ -28,11 +28,24 @@ SEFLG_JPLEPH <- as.integer(1)
 SEFLG_SWIEPH <- as.integer(2)
 SEFLG_MOSEPH <- as.integer(4)
 SEFLG_HELCTR <- as.integer(8)
+
 SEFLG_TRUEPOS <- as.integer(16)
 SEFLG_J2000 <- as.integer(32)
+SEFLG_NONUT          	<- as.integer(64) #no nutation, i.e. mean equinox of date 
+SEFLG_SPEED          	<- as.integer(256) #high precision speed (analyt. comp.)
+SEFLG_NOGDEFL 	<- as.integer(512) #turn off gravitational deflection 
+SEFLG_NOABERR 	<- as.integer(1024) # turn off 'annual' aberration of light 
+#define SEFLG_ASTROMETRIC (SEFLG_NOABERR|SEFLG_NOGDEFL) // astrometric positions
 SEFLG_EQUATORIAL <- as.integer(2048)
 SEFLG_XYZ <- as.integer(4096)
+SEFLG_RADIANS       	<- as.integer(8192) # coordinates in radians, not degrees 
+SEFLG_BARYCTR       	<- as.integer(16384) # barycentric positions 
 SEFLG_TOPOCTR <- as.integer(32768)
+SEFLG_SIDEREAL<- as.integer(64*1024) # sidereal positions 
+SEFLG_ICRS	<- as.integer(128*1024) # ICRS (DE406 reference frame) 
+SEFLG_DPSIDEPS_1980     <- as.integer(256*1024) # reproduce JPL Horizons * 1962 - today to 0.002 arcsec
+SEFLG_JPLHOR    <- SEFLG_DPSIDEPS_1980
+SEFLG_JPLHOR_APPROX     <- as.integer(512*1024) # approximate JPL Horizons 1962 - today
 
 #determine the type of emphemeris used
 Ephemeris <- SEFLG_MOSEPH
