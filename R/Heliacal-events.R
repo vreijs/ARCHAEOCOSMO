@@ -108,9 +108,6 @@ HeliacalJDutSE <- function (JDNDaysUTStart,
   return(ResultVector)
 }
 
-
-
-
 ###################################################################
 S_HeliacalJDut <-
   function (JDNDaysUTStart,
@@ -171,237 +168,237 @@ S_HeliacalJDut <-
     return (Heliacal)
   }
 
-###################################################################
-HeliacalAngle <-
-  function(Magn,
-           Age,
-           SN,
-           AziO,
-           AltM,
-           AziM,
-           JDNDaysUT,
-           AziS,
-           Lat,
-           HeightEye,
-           Temperature,
-           pressure,
-           RH,
-           vr,
-           TypeAngle = 0) {
-    # ' Magn [-]
-    # ' age [Year]
-    # ' SN [-]
-    # ' AziO [deg]
-    # ' AltM [deg]
-    # ' AziM [deg]
-    # ' JDNDaysUT [-]
-    # ' AziS [deg]
-    # ' Lat [deg]
-    # ' HeightEye [m]
-    # ' Temperature [C]
-    # ' Pressure [mbar]
-    # ' RH [%]
-    # ' VR [km]
-    # ' TypeAngle [0=heliacal, 1=Arcus Visonis, 2=Sun's altitude]
-    # ' HeliacalAngle [deg]
-    
-    if (PLSV == 1) {
-      if (TypeAngle == 0) {
-        Angle <- criticalangle
-      }
-      if (TypeAngle == 1) {
-        Angle <- criticalangle + Magn * 2.492 + 13.447
-      }
-      if (TypeAngle == 2) {
-        Angle <- -(Magn * 2.492 + 13.447)
-      } #Magn * 1.1 + 8.9
-      return (angle)
-    }
-    Magnify<-1
-    minx <- 2
-    maxx <- 20
-    xmin = 0
-    ymin <- 10000
-    for (X in minx:maxx) {
-      Arc <-
-        S_TopoArcVisionisSE(
-          Magn,
-          Age,
-          SN,
-          X,
-          AziO,
-          AltM,
-          AziM,
-          JDNDaysUT,
-          AziS,
-          Lat,
-          HeightEye,
-          Temperature,
-          pressure,
-          RH,
-          vr,Magnify
-        )
-      if (Arc < ymin) {
-        ymin <- Arc
-        xmin <- X
-      }
-    }
-    XL <- xmin - 1
-    XR <- xmin + 1
-    YR <-
-      S_TopoArcVisionisSE(
-        Magn,
-        Age,
-        SN,
-        XR,
-        AziO,
-        AltM,
-        AziM,
-        JDNDaysUT,
-        AziS,
-        Lat,
-        HeightEye,
-        Temperature,
-        pressure,
-        RH,
-        vr,Magnify
-      )
-    YL <-
-      S_TopoArcVisionisSE(
-        Magn,
-        Age,
-        SN,
-        XL,
-        AziO,
-        AltM,
-        AziM,
-        JDNDaysUT,
-        AziS,
-        Lat,
-        HeightEye,
-        Temperature,
-        pressure,
-        RH,
-        vr,Magnify
-      )
-    # http://en.wikipedia.org/wiki/Bisection_method
-    while (abs(XR - XL) > 0.1) {
-      #Calculate midpoint of domain
-      Xm <- (XR + XL) / 2
-      DELTAx <- 0.025
-      xmd <- Xm + DELTAx
-      Ym <-
-        S_TopoArcVisionisSE(
-          Magn,
-          Age,
-          SN,
-          Xm,
-          AziO,
-          AltM,
-          AziM,
-          JDNDaysUT,
-          AziS,
-          Lat,
-          HeightEye,
-          Temperature,
-          pressure,
-          RH,
-          vr,Magnify
-        )
-      ymd <-
-        S_TopoArcVisionisSE(
-          Magn,
-          Age,
-          SN,
-          xmd,
-          AziO,
-          AltM,
-          AziM,
-          JDNDaysUT,
-          AziS,
-          Lat,
-          HeightEye,
-          Temperature,
-          pressure,
-          RH,
-          vr,Magnify
-        )
-      if (Ym >= ymd) {
-        #Throw away left half
-        XL <- Xm
-        YL <- Ym
-      }
-      else {
-        #Throw away right half
-        XR <- Xm
-        YR <- Ym
-      }
-    }
-    Xm <- (XR + XL) / 2
-    Ym <- (YR + YL) / 2
-    if (TypeAngle == 0) {
-      Angle <- Xm
-    }
-    if (TypeAngle == 1) {
-      Angle <- Ym
-    }
-    if (TypeAngle == 2) {
-      Angle <- Xm - Ym
-    }
-    return(Andle)
-  }
-
-
-###################################################################
-
-S_TopoArcVisionisSE <-
-  function(Magn,
-           Age,
-           SN,
-           AltO,
-           AziO,
-           AltM,
-           AziM,
-           JDNDaysUT,
-           AziS,
-           Lat,
-           HeightEye,
-           Temperature,
-           pressure,
-           RH,
-           vr,
-           Magnify = 1) {
-    # Dim serr As String
-    # Dim dgeo(2) As Double
-    # Dim dobs(5) As Double
-    # Dim datm(3) As Double
-    # Dim helflag As Long
-    
-    dgeo <- c(Longitude, Lat, HeightEye)
-    datm <- c(pressure, Temperature, RH, vr)
-    dobs <-
-      c(Age, SN, GBinocular, Magnify, Magnify * 5, GOpticTrans)
-    
-    helflag <- SE_HELIACAL_HIGH_PRECISION + SE_HELIACAL_OPTICAL_PARAMS
-    i <-
-      swe_topo_arcus_visionis(
-        JDNDaysUT,
-        dgeo,
-        datm,
-        dobs,
-        helflag,
-        Magn,
-        AziO,
-        AltO,
-        AziS,
-        AziM,
-        AltM
-      )
-    if (i$return == 0) {
-      TAV = i$tav
-    }
-    else {
-      TAV = i$serr
-    }
-    return(TAV)
-  }
+# ###################################################################
+# S_HeliacalAngle <-
+#   function(Magn,
+#            Age,
+#            SN,
+#            AziO,
+#            AltM,
+#            AziM,
+#            JDNDaysUT,
+#            AziS,
+#            Lat,
+#            HeightEye,
+#            Temperature,
+#            pressure,
+#            RH,
+#            vr,
+#            TypeAngle = 0) {
+#     # ' Magn [-]
+#     # ' age [Year]
+#     # ' SN [-]
+#     # ' AziO [deg]
+#     # ' AltM [deg]
+#     # ' AziM [deg]
+#     # ' JDNDaysUT [-]
+#     # ' AziS [deg]
+#     # ' Lat [deg]
+#     # ' HeightEye [m]
+#     # ' Temperature [C]
+#     # ' Pressure [mbar]
+#     # ' RH [%]
+#     # ' VR [km]
+#     # ' TypeAngle [0=heliacal, 1=Arcus Visonis, 2=Sun's altitude]
+#     # ' HeliacalAngle [deg]
+# 
+#     if (PLSV == 1) {
+#       if (TypeAngle == 0) {
+#         Angle <- criticalangle
+#       }
+#       if (TypeAngle == 1) {
+#         Angle <- criticalangle + Magn * 2.492 + 13.447
+#       }
+#       if (TypeAngle == 2) {
+#         Angle <- -(Magn * 2.492 + 13.447)
+#       } #Magn * 1.1 + 8.9
+#       return (angle)
+#     }
+#     Magnify<-1
+#     minx <- 2
+#     maxx <- 20
+#     xmin = 0
+#     ymin <- 10000
+#     for (X in minx:maxx) {
+#       Arc <-
+#         S_TopoArcVisionisSE(
+#           Magn,
+#           Age,
+#           SN,
+#           X,
+#           AziO,
+#           AltM,
+#           AziM,
+#           JDNDaysUT,
+#           AziS,
+#           Lat,
+#           HeightEye,
+#           Temperature,
+#           pressure,
+#           RH,
+#           vr,Magnify
+#         )
+#       if (Arc < ymin) {
+#         ymin <- Arc
+#         xmin <- X
+#       }
+#     }
+#     XL <- xmin - 1
+#     XR <- xmin + 1
+#     YR <-
+#       S_TopoArcVisionisSE(
+#         Magn,
+#         Age,
+#         SN,
+#         XR,
+#         AziO,
+#         AltM,
+#         AziM,
+#         JDNDaysUT,
+#         AziS,
+#         Lat,
+#         HeightEye,
+#         Temperature,
+#         pressure,
+#         RH,
+#         vr,Magnify
+#       )
+#     YL <-
+#       S_TopoArcVisionisSE(
+#         Magn,
+#         Age,
+#         SN,
+#         XL,
+#         AziO,
+#         AltM,
+#         AziM,
+#         JDNDaysUT,
+#         AziS,
+#         Lat,
+#         HeightEye,
+#         Temperature,
+#         pressure,
+#         RH,
+#         vr,Magnify
+#       )
+#     # http://en.wikipedia.org/wiki/Bisection_method
+#     while (abs(XR - XL) > 0.1) {
+#       #Calculate midpoint of domain
+#       Xm <- (XR + XL) / 2
+#       DELTAx <- 0.025
+#       xmd <- Xm + DELTAx
+#       Ym <-
+#         S_TopoArcVisionisSE(
+#           Magn,
+#           Age,
+#           SN,
+#           Xm,
+#           AziO,
+#           AltM,
+#           AziM,
+#           JDNDaysUT,
+#           AziS,
+#           Lat,
+#           HeightEye,
+#           Temperature,
+#           pressure,
+#           RH,
+#           vr,Magnify
+#         )
+#       ymd <-
+#         S_TopoArcVisionisSE(
+#           Magn,
+#           Age,
+#           SN,
+#           xmd,
+#           AziO,
+#           AltM,
+#           AziM,
+#           JDNDaysUT,
+#           AziS,
+#           Lat,
+#           HeightEye,
+#           Temperature,
+#           pressure,
+#           RH,
+#           vr,Magnify
+#         )
+#       if (Ym >= ymd) {
+#         #Throw away left half
+#         XL <- Xm
+#         YL <- Ym
+#       }
+#       else {
+#         #Throw away right half
+#         XR <- Xm
+#         YR <- Ym
+#       }
+#     }
+#     Xm <- (XR + XL) / 2
+#     Ym <- (YR + YL) / 2
+#     if (TypeAngle == 0) {
+#       Angle <- Xm
+#     }
+#     if (TypeAngle == 1) {
+#       Angle <- Ym
+#     }
+#     if (TypeAngle == 2) {
+#       Angle <- Xm - Ym
+#     }
+#     return(Andle)
+#   }
+# 
+# 
+# ###################################################################
+# 
+# S_TopoArcVisionisSE <-
+#   function(Magn,
+#            Age,
+#            SN,
+#            AltO,
+#            AziO,
+#            AltM,
+#            AziM,
+#            JDNDaysUT,
+#            AziS,
+#            Lat,
+#            HeightEye,
+#            Temperature,
+#            pressure,
+#            RH,
+#            vr,
+#            Magnify = 1) {
+#     # Dim serr As String
+#     # Dim dgeo(2) As Double
+#     # Dim dobs(5) As Double
+#     # Dim datm(3) As Double
+#     # Dim helflag As Long
+# 
+#     dgeo <- c(Longitude, Lat, HeightEye)
+#     datm <- c(pressure, Temperature, RH, vr)
+#     dobs <-
+#       c(Age, SN, GBinocular, Magnify, Magnify * 5, GOpticTrans)
+# 
+#     helflag <- SE_HELIACAL_HIGH_PRECISION + SE_HELIACAL_OPTICAL_PARAMS
+#     i <-
+#       swe_topo_arcus_visionis(
+#         JDNDaysUT,
+#         dgeo,
+#         datm,
+#         dobs,
+#         helflag,
+#         Magn,
+#         AziO,
+#         AltO,
+#         AziS,
+#         AziM,
+#         AltM
+#       )
+#     if (i$return == 0) {
+#       TAV = i$tav
+#     }
+#     else {
+#       TAV = i$serr
+#     }
+#     return(TAV)
+#   }
