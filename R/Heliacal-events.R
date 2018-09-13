@@ -349,56 +349,56 @@ S_HeliacalJDut <-
 #   }
 # 
 # 
-# ###################################################################
-# 
-# S_TopoArcVisionisSE <-
-#   function(Magn,
-#            Age,
-#            SN,
-#            AltO,
-#            AziO,
-#            AltM,
-#            AziM,
-#            JDNDaysUT,
-#            AziS,
-#            Lat,
-#            HeightEye,
-#            Temperature,
-#            pressure,
-#            RH,
-#            vr,
-#            Magnify = 1) {
-#     # Dim serr As String
-#     # Dim dgeo(2) As Double
-#     # Dim dobs(5) As Double
-#     # Dim datm(3) As Double
-#     # Dim helflag As Long
-# 
-#     dgeo <- c(Longitude, Lat, HeightEye)
-#     datm <- c(pressure, Temperature, RH, vr)
-#     dobs <-
-#       c(Age, SN, GBinocular, Magnify, Magnify * 5, GOpticTrans)
-# 
-#     helflag <- SE_HELIACAL_HIGH_PRECISION + SE_HELIACAL_OPTICAL_PARAMS
-#     i <-
-#       swe_topo_arcus_visionis(
-#         JDNDaysUT,
-#         dgeo,
-#         datm,
-#         dobs,
-#         helflag,
-#         Magn,
-#         AziO,
-#         AltO,
-#         AziS,
-#         AziM,
-#         AltM
-#       )
-#     if (i$return == 0) {
-#       TAV = i$tav
-#     }
-#     else {
-#       TAV = i$serr
-#     }
-#     return(TAV)
-#   }
+###################################################################
+
+S_TopoArcVisionisSE <-
+  function(Magn,
+           Age,
+           SN,
+           AltO,
+           AziO,
+           AltM,
+           AziM,
+           JDNDaysUT,
+           AziS,
+           Lat,
+           HeightEye,
+           Temperature,
+           pressure,
+           RH,
+           vr,
+           Magnify = 1) {
+    # Dim serr As String
+    # Dim dgeo(2) As Double
+    # Dim dobs(5) As Double
+    # Dim datm(3) As Double
+    # Dim helflag As Long
+
+    dgeo <- c(0, Lat, HeightEye)
+    datm <- c(pressure, Temperature, RH, vr)
+    dobs <-
+      c(Age, SN, GBinocular, Magnify, Magnify * 5, GOpticTrans)
+
+    helflag <- SE_HELIACAL_HIGH_PRECISION + SE_HELIACAL_OPTICAL_PARAMS
+    i <-
+      swe_topo_arcus_visionis(
+        JDNDaysUT,
+        dgeo,
+        datm,
+        dobs,
+        helflag,
+        Magn,
+        AziO,
+        AltO,
+        AziS,
+        AziM,
+        AltM
+      )
+    if (i$return == 0) {
+      TAV = i$tav
+    }
+    else {
+      TAV = i$serr
+    }
+    return(TAV)
+  }
