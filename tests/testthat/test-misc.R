@@ -67,3 +67,26 @@ test_that("Txxx", {
 test_that("Txxx", {
   expect_equal(TopoAltfromHeights(5, 3000, 2000), 56.25059, tolerance = .0000001)
 })
+
+test_that("GeoDecfromGeoAlt", {
+  expect_equal(GeoDecfromGeoAlt(50,2,124,0), -19.419901780792, tolerance = .0000001)
+})
+
+
+
+test_that("GeoDecfromTopoAlt", {
+  expect_equal(GeoDecfromAppAlt(50,2,124,0,"star"), -19.6664938960708, tolerance = .0000001)
+})
+
+
+test_that("hor2eq GeoAlt", {
+  result<-astrolibR::hor2eq(2,124,2451545,50,0, refract_=F,nutate_=F,aberration_=F)
+  expect_equal(result$dec, -19.419901780792, tolerance = .0000001)
+})
+
+
+test_that("hor2eq AppAlt", {
+  result <- astrolibR::hor2eq(2,124,2451545,50,0, nutate_=F,aberration_=F)
+  expect_equal(result$dec, -19.6689779937584, tolerance = .0000001)
+})
+

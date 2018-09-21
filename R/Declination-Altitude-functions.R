@@ -543,7 +543,7 @@ GeoDecfromGeoAlt <-
            Azi,
            Rim = RimDefault) {
     functionvector <- data.frame(Lat, GeoAlt, Azi, Rim)
-    #    print(functionvector)
+    #   print(functionvector)
     ResultVector <- c(0)
     for (i in 1:nrow(functionvector))
     {
@@ -1075,7 +1075,7 @@ S_AzifromGeoAlt <- function(Lat, GeoAlt, GeoDec, Rim) {
   # ' GeoAlt [deg]
   # ' GeoDec [deg]
   # ' Rim [-1,0, 1] -1=bottom, 0=center, 1=top
-  # ' AzimuthfromGeoAlt [deg]
+  # ' AzifromGeoAlt [deg]
   
   Lati <- Lat * Deg2Rad
   GeoAlti <- (GeoAlt - Rim * AvgRadius) * Deg2Rad
