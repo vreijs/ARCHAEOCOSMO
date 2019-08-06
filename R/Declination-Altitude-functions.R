@@ -281,7 +281,7 @@ S_GeoAltfromTopoAlt <- function (TopoAlt, ObjectDist) {
   # GeoAltfromTopoAlt [deg]
   
   # V. Reijs, 2002; derivative of http://www.stjarnhimlen.se/comp/ppcomp.html#13 when TopoAlt is the base
-  Angle <- TopoAlt + S_ParallaxfromTopoAlt(TopoAlt, ObjectDist)
+  Angle <- TopoAlt + S_ParAltfromTopoAlt(TopoAlt, ObjectDist)
   return(Angle)
 }
 
@@ -306,29 +306,29 @@ S_TopoAltfromGeoAlt <- function (GeoAlt, ObjectDist) {
   # TopoAltfromGeoAlt [deg]
   
   # http://www.stjarnhimlen.se/comp/ppcomp.html#13
-  Angle <- GeoAlt - S_ParallaxfromGeoAlt(GeoAlt, ObjectDist)
+  Angle <- GeoAlt - S_ParAltfromGeoAlt(GeoAlt, ObjectDist)
   return(Angle)
 }
 
 ###################################################################
-ParallaxfromTopoAlt <- function (TopoAlt, ObjectDist) {
+ParAltfromTopoAlt <- function (TopoAlt, ObjectDist) {
   functionvector <-
     data.frame(TopoAlt, ObjectDist, stringsAsFactors = FALSE)
   #  print(functionvector)
   ResultVector <- c(0)
   for (i in 1:nrow(functionvector))
   {
-    ResultVector[i] = S_ParallaxfromTopoAlt(functionvector$TopoAlt[i],
+    ResultVector[i] = S_ParAltfromTopoAlt(functionvector$TopoAlt[i],
                                             functionvector$ObjectDist[i])
   }
   return(ResultVector)
 }
 
 ###################################################################
-S_ParallaxfromTopoAlt <- function (TopoAlt, ObjectDist) {
+S_ParAltfromTopoAlt <- function (TopoAlt, ObjectDist) {
   # TopoAlt [deg]
   # ObjectDist [sun,moonavg,moonnearest,moonfurthest,star,topo]
-  # ParallaxfromTopoAlt [deg]
+  # ParAltfromTopoAlt [deg]
   
   ObjectDist <- tolower(ObjectDist)
   TopoAlti <- TopoAlt * Deg2Rad
@@ -343,24 +343,24 @@ S_ParallaxfromTopoAlt <- function (TopoAlt, ObjectDist) {
 }
 
 ###################################################################
-ParallaxfromGeoAlt <- function (GeoAlt, ObjectDist) {
+ParAltfromGeoAlt <- function (GeoAlt, ObjectDist) {
   functionvector <-
     data.frame(GeoAlt, ObjectDist, stringsAsFactors = FALSE)
   #  print(functionvector)
   ResultVector <- c(0)
   for (i in 1:nrow(functionvector))
   {
-    ResultVector[i] = S_ParallaxfromTopoAlt(functionvector$GeoAlt[i],
+    ResultVector[i] = S_ParAltfromTopoAlt(functionvector$GeoAlt[i],
                                             functionvector$ObjectDist[i])
   }
   return(ResultVector)
 }
 
 ###################################################################
-S_ParallaxfromGeoAlt <- function (GeoAlt, ObjectDist) {
+S_ParAltfromGeoAlt <- function (GeoAlt, ObjectDist) {
   # GeoAlt [deg]
   # ObjectDist [sun,moonavg,moonnearest,moonfurthest,star,topo]
-  # ParallaxfromGeoAlt [deg]
+  # ParAltfromGeoAlt [deg]
   
   GeoAlti <- GeoAlt * Deg2Rad
   mpar <- S_Maxpar(ObjectDist)
