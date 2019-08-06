@@ -38,11 +38,11 @@ test_that("Txxx", {
   expect_equal(TopoAltfromGeoAlt(0, "moonavg"), -0.952, tolerance = .0000001)
 })
 test_that("Txxx", {
-  expect_equal(ParallaxfromTopoAlt(-0.559888644263346, "moonavg"),
+  expect_equal(ParAltfromTopoAlt(-0.559888644263346, "moonavg"),
                0.9521091, tolerance = .0000001)
 })
 test_that("Txxx", {
-  expect_equal(ParallaxfromGeoAlt(0, "moonavg"), 0.952, tolerance = .0000001)
+  expect_equal(ParAltfromGeoAlt(0, "moonavg"), 0.952, tolerance = .0000001)
 })
 test_that("Txxx", {
   expect_equal(S_Maxpar("moonavg"), 0.952, tolerance = .0000001)
@@ -79,14 +79,4 @@ test_that("GeoDecfromTopoAlt", {
 })
 
 
-test_that("hor2eq GeoAlt", {
-  result<-astrolibR::hor2eq(2,124,2451545,50,0, refract_=F,nutate_=F,aberration_=F)
-  expect_equal(result$dec, -19.419901780792, tolerance = .0000001)
-})
-
-
-test_that("hor2eq AppAlt", {
-  result <- astrolibR::hor2eq(2,124,2451545,50,0, nutate_=F,aberration_=F)
-  expect_equal(result$dec, -19.6689779937584, tolerance = .0000001)
-})
 
