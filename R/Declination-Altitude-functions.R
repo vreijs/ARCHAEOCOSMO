@@ -95,8 +95,8 @@ MoonInclination <- 5.1453964 #[Deg]
 MoonPerturb <- 0.145 #[Deg]
 MoonDistance <- 384410.4978 #[km]
 MoonAvgPar <- 0.952 #[deg]
-MoonMinPar <- 1.004 #[deg]
-MoonMaxPar <- 0.9 #[deg]
+MoonMaxPar <- 1.004 #[deg]
+MoonMinPar <- 0.9 #[deg]
 SunPar <- 0.00224 #[deg]
 
 # average radius of moon/sun disc
@@ -392,11 +392,11 @@ S_Maxpar <- function (ObjectDist) {
   if (ObjectDist == "moonavg")  {
     Parallax <- MoonAvgPar
   }
-  # maximum parallax determined by V. Reijs based on maximum earth-moon distance
+  # maximum parallax determined by V. Reijs based on minimum earth-moon distance
   if (ObjectDist == "moonnearest") {
     Parallax <- MoonMaxPar
   }
-  # minimum parallax determined by V. Reijs based on minimum earth-moon distance
+  # minimum parallax determined by V. Reijs based on maximum earth-moon distance
   if (ObjectDist == "moonfurthest") {
     Parallax <- MoonMinPar
   }
@@ -1444,10 +1444,10 @@ S_TopoDecfromGeoDec <- function(GeoDec, ObjectDist) {
   # print(ObjectDist)
   switch ( ObjectDist,
     "moonnearest" = {
-      Angle <- GeoDec - MoonMinPar
+      Angle <- GeoDec - MoonMaxPar
     },
     "moonfurthest" = {
-      Angle <- GeoDec - MoonMaxPar
+      Angle <- GeoDec - MoonMinPar
     },
     "moonavg" = {
       Angle <- GeoDec - MoonAvgPar
