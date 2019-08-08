@@ -1,5 +1,5 @@
 ####################################################################
-# (c) V. Reijs, 2006-2018
+# (c) V. Reijs, 2006-2019
 # ARCHAEOCOSMO library (leaf from version 1.01)
 # astronomical, geodetic and meteorological formula
 #    This program is free software; you can redistribute it and/or modify
