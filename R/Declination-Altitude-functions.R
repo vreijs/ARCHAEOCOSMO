@@ -383,13 +383,19 @@ Maxpar <- function (ObjectDist) {
 
 ###################################################################
 S_Maxpar <- function (ObjectDist) {
-  # ObjectDist [sun,moonavg,moonnearest,moonfurthest,star,topo]
+  # ObjectDist [sun,moonavg,moonnearest,moonfurthest,star,topo,moonmajor,moonminor,solstice]
   # S_Maxpar [deg]
   
   ObjectDist <- tolower(ObjectDist)
   Parallax <- 0
   # average parallax determined by V. Reijs based on average earth-moon distance
   if (ObjectDist == "moonavg")  {
+    Parallax <- MoonAvgPar
+  }
+  if (ObjectDist == "moonmajor")  {
+    Parallax <- MoonAvgPar
+  }
+  if (ObjectDist == "moonminor")  {
     Parallax <- MoonAvgPar
   }
   # maximum parallax determined by V. Reijs based on minimum earth-moon distance
@@ -402,6 +408,9 @@ S_Maxpar <- function (ObjectDist) {
   }
   # from Russell Simpson, Variability in the Astronomical Refraction of the Rising & Setting Sun, Astronomical Society of the Pacific, 115, page 1256-1261.
   if (ObjectDist == "sun") {
+    Parallax <- SunPar
+  }
+  if (ObjectDist == "solstice") {
     Parallax <- SunPar
   }
   if (ObjectDist == "star") {
@@ -1151,7 +1160,7 @@ GeoDecfromSolarLunarEvent <-
   function (JDNDays,
             Object,
             NS,
-            DeclType = "geo") {
+            DeclType = "geo",GeoAlt=0,Rim=0,Lat=53) {
     functionvector <-
       data.frame(JDNDays,
                  Object,
@@ -1165,7 +1174,10 @@ GeoDecfromSolarLunarEvent <-
         functionvector$JDNDays[i],
         functionvector$Object[i],
         functionvector$NS[i],
-        functionvector$DeclType[i]
+        functionvector$DeclType[i],
+        functionvector$GeoAlt[i],
+        functionvector$Rim[i],
+        functionvector$Lat[i]
       )
     }
     return(ResultVector)
@@ -1175,7 +1187,7 @@ GeoDecfromSolarLunarEvent <-
 ###################################################################
 #there is a swap of the NS and DeclType arguments compared to VBA code!
 S_GeoDecfromSolarLunarEvent <-
-  function(JDNDays, Object, NS, DeclType = "geo") {
+  function(JDNDays, Object, NS, DeclType = "geo",GeoAlt=0,Rim=0,Lat=53) {
     # ' JDNDays [Day]
     # ' Object [solstice,moonmajor,moonminor]
     # ' NS (0=South-Winter,1=North-Summer)
@@ -1195,7 +1207,7 @@ S_GeoDecfromSolarLunarEvent <-
       Angle = -Angle
     }
     if (DeclType == "topo") {
-         Angle <- S_TopoDecfromGeoDec(Angle, Object)
+         Angle <- S_TopoDecfromGeoDec(Angle, Object,GeoAlt,Rim,Lat)
     }
     return(Angle)
   }
@@ -1424,50 +1436,52 @@ S_GeoAltfromGeoDecHour <- function(Lat, GeoDec, GeoHour) {
 }
 
 ###################################################################
-TopoDecfromGeoDec <- function (GeoDec, ObjectDist) {
+TopoDecfromGeoDec <- function (GeoDec, ObjectDist,GeoAlt=0,Rim=0,Lat=53) {
   
-  functionvector <- data.frame(GeoDec, ObjectDist,stringsAsFactors = FALSE)
+  functionvector <- data.frame(GeoDec, ObjectDist,GeoAlt,Rim,Lat,stringsAsFactors = FALSE)
  # print(functionvector)
   ResultVector <- c(0)
   for (i in 1:nrow(functionvector)) {
-      ResultVector[i] = S_TopoDecfromGeoDec(functionvector$GeoDec[i],functionvector$ObjectDist[i])
+      ResultVector[i] = S_TopoDecfromGeoDec(functionvector$GeoDec[i],functionvector$ObjectDist[i],functionvector$GeoAlt[i],functionvector$Rim[i],functionvector$Lat[i])
   }
   return(ResultVector)
 }
 
 ##################################################################
-S_TopoDecfromGeoDec <- function(GeoDec, ObjectDist) {
+S_TopoDecfromGeoDec <- function(GeoDec, ObjectDist,GeoAlt=0,Rim=0,Lat=53) {
   # GeoDec [deg]
   # ObjectDist [sun,moonavg,moonnearest,moonfurthest,star
+  # Gealt [deg]
+  # Rim (-1,0,1) at above Alt
+  # greographic latitude [deg]
   # TopoDecfromGeoDec [deg]
   
   # print(ObjectDist)
-  switch ( ObjectDist,
-    "moonnearest" = {
-      Angle <- GeoDec - MoonMaxPar
-    },
-    "moonfurthest" = {
-      Angle <- GeoDec - MoonMinPar
-    },
-    "moonavg" = {
-      Angle <- GeoDec - MoonAvgPar
-    },
-    "moonmajor" = {
-      Angle <- GeoDec - MoonAvgPar
-    },
-    "moonminor" = {
-      Angle <- GeoDec - MoonAvgPar
-    },
-    "sun" = {
-      Angle <- GeoDec - SunPar
-    },
-    "solstice" = {
-      Angle <- GeoDec - SunPar
-    },
-    "star" = {
-      Angle <- GeoDec
-    },
-    {Angle <- NA}
-  )
+       Angle <- GeoDec - S_ParDecfromGeoAltLat(Lat,GeoAlt,Rim,GeoDec,ObjectDist)
    return (Angle)
 }
+
+##################################################################
+S_ParDecfromGeoAltLat <- function(Lat=53,GeoAlt=0,Rim=0,GeoDec, ObjectDist) {
+  # greographic latitude [deg]
+  # Gealt [deg]
+  # Rim (-1,0,1) at above Alt
+  # GeoDec [deg]
+  # ObjectDist [sun,moonavg,moonnearest,moonfurthest,star
+  # ParDecfromGeoAltLat [deg]
+  
+  # print(ObjectDist)
+  Lati <- Lat * Deg2Rad
+  GeoDeci <- GeoDec * Deg2Rad
+  if (ObjectDist == "star") {Rim = 0}
+  # http://www.stjarnhimlen.se/comp/ppcomp.html#13
+  HA = S_HourAngle((GeoAlt - Rim * AvgRadius), GeoDec, Lat) * 15 * Deg2Rad
+  mpar = S_Maxpar(ObjectDist)
+  if (Lati != 0) {    
+     GHELP <- atan(tan(Lati) / cos(HA))
+    ParDecfromGeoAltLat <- mpar * sin(Lati) * sin(GHELP - GeoDeci) / sin(GHELP)}
+  else {ParDecfromGeoAltLat <- mpar * sin(-GeoDeci) * cos(HA)}
+  return (ParDecfromGeoAltLat)
+}
+
+
