@@ -1,3 +1,4 @@
+#' @export
 EclipseWhenUT <- function (JDNDaysUT,
                            Lat,
                            Longitude,

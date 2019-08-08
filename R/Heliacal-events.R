@@ -52,7 +52,7 @@ Schaefer90 = 0 #0 if 50% and 1 if 90% visibility
 SchaeferRefDef = 1 #Btwi according to "XI" if 1993 and "XV" if 2000 paper and a number for XV/number
 
 
-
+#' @export
 HeliacalJDutSE <- function (JDNDaysUTStart,
                             Age,
                             SN,

@@ -1,3 +1,4 @@
+#' @export
 SolarEvent <-   function(JDNDaysUT, SolarEventType, NoDeltaT = 0) {
   functionvector <- data.frame(
     JDNDaysUT, SolarEventType, NoDeltaT

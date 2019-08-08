@@ -260,7 +260,8 @@ S_AppAltfromTopoAlt <- function (TopoAlt,
   return(Angle)
 }
 
-###################################################################
+#' @export
+####################################################################
 GeoAltfromTopoAlt <- function (TopoAlt, ObjectDist) {
   functionvector <-
     data.frame(TopoAlt, ObjectDist, stringsAsFactors = FALSE)
@@ -285,6 +286,7 @@ S_GeoAltfromTopoAlt <- function (TopoAlt, ObjectDist) {
   return(Angle)
 }
 
+#' @export
 ###################################################################
 TopoAltfromGeoAlt <- function (GeoAlt, ObjectDist) {
   functionvector <-
@@ -310,6 +312,7 @@ S_TopoAltfromGeoAlt <- function (GeoAlt, ObjectDist) {
   return(Angle)
 }
 
+#' @export
 ###################################################################
 ParAltfromTopoAlt <- function (TopoAlt, ObjectDist) {
   functionvector <-
@@ -342,6 +345,7 @@ S_ParAltfromTopoAlt <- function (TopoAlt, ObjectDist) {
   return(Angle)
 }
 
+#' @export
 ###################################################################
 ParAltfromGeoAlt <- function (GeoAlt, ObjectDist) {
   functionvector <-
@@ -369,6 +373,7 @@ S_ParAltfromGeoAlt <- function (GeoAlt, ObjectDist) {
   return(Angle)
 }
 
+#' @export
 ###################################################################
 Maxpar <- function (ObjectDist) {
   functionvector <- data.frame(ObjectDist)
@@ -419,6 +424,7 @@ S_Maxpar <- function (ObjectDist) {
   return(Parallax)
 }
 
+#' @export
 ###################################################################
 GeoDecfromAppAlt <-
   function(Lat,
@@ -487,6 +493,7 @@ S_GeoDecfromAppAlt <-
     return(DecAngle)
   }
 
+#' @export
 ###################################################################
 TopoDecfromAppAlt <-
   function(Lat,
@@ -545,6 +552,7 @@ S_TopoDecfromAppAlt <-
     return(DecAngle)
   }
 
+#' @export
 ###################################################################
 GeoDecfromGeoAlt <-
   function(Lat,
@@ -585,6 +593,7 @@ S_GeoDecfromGeoAlt <-
     return(DecAngle)
   }
 
+#' @export
 ###################################################################
 TopoAltfromDip <- function (HObs, HeightDist, Lat = AverageLat) {
   # Hobs [m]
@@ -625,6 +634,7 @@ S_TopoAltfromDip <- function (HObs, HeightDist, Lat = AverageLat) {
   return(Angle)
 }
 
+#' @export
 ###################################################################
 AppAltfromHeights <- function (HeightEye,
                                HeightDist,
@@ -702,6 +712,7 @@ S_AppAltfromHeights <-
     return(Angle)
   }
 
+#' @export
 ###################################################################
 TopoAltfromHeights <- function (HeightEye,
                                 HeightDist,
@@ -769,6 +780,7 @@ S_Rt <- function (TempE = TempDefault,
   return(Refract)
 }
 
+#' @export
 ###################################################################
 AppAltfromDip <- function (HObs,
                            HeightDist,
@@ -835,6 +847,7 @@ S_AppAltfromDip <-
     return(Angle)
   }
 
+#' @export
 ###################################################################
 RefractConstfromLapse <- function (Lapse = LapseDefault) {
   # Lapse [K/m]
@@ -846,6 +859,7 @@ RefractConstfromLapse <- function (Lapse = LapseDefault) {
   return(Lapse)
 }
 
+#' @export
 ###################################################################
 StdGeoDec <-
   function (Lat, StdLat, GeoAlt, StdGeoAlt, Azi, StdAzi) {
@@ -898,6 +912,7 @@ S_StdGeoDec <-
     return(Error)
   }
 
+#' @export
 ###################################################################
 GCenLatfromGDetLat <-
   function (GDetLat) {
@@ -921,6 +936,7 @@ S_GCenLatfromGDetLat <- function(GDetLat) {
   return(Angle)
 }
 
+#' @export
 ###################################################################
 GDetLatfromGCenLat <-
   function (GCenLat) {
@@ -946,6 +962,7 @@ Angle <- atan(tan(GCenLat * Deg2Rad) / ((Rb / RA) ^ 2)) * Rad2Deg
 return(Angle)}
 
 
+#' @export
 ###################################################################
 REarth <- function (Lat = AverageLat) {
   # Lat [deg]
@@ -1121,6 +1138,7 @@ S_AzifromAppAlt <-
     return(Angle)
   }
 
+#' @export
 ###################################################################
 TopoDecfromSolarLunarEvent <-
   function (JDNDays,
@@ -1155,6 +1173,7 @@ S_TopoDecfromSolarLunarEvent <- function(JDNDays, Object, NS) {
     Angle <- S_GeoDecfromSolarLunarEvent(JDNDays, Object, NS,"topo")
 return(Angle)}
 
+#' @export
 ###################################################################
 GeoDecfromSolarLunarEvent <-
   function (JDNDays,
@@ -1435,6 +1454,7 @@ S_GeoAltfromGeoDecHour <- function(Lat, GeoDec, GeoHour) {
   return(Angle)
 }
 
+#' @export
 ###################################################################
 TopoDecfromGeoDec <- function (GeoDec, ObjectDist,GeoAlt=0,Rim=0,Lat=53) {
   
@@ -1459,6 +1479,19 @@ S_TopoDecfromGeoDec <- function(GeoDec, ObjectDist,GeoAlt=0,Rim=0,Lat=53) {
   # print(ObjectDist)
        Angle <- GeoDec - S_ParDecfromGeoAltLat(Lat,GeoAlt,Rim,GeoDec,ObjectDist)
    return (Angle)
+}
+
+#' @export
+###################################################################
+ParDecfromGeoAltLat <- function(Lat=53,GeoAlt=0,Rim=0,GeoDec, ObjectDist) {
+  
+  functionvector <- data.frame(Lat,GeoAlt,Rim,GeoDec, ObjectDist,stringsAsFactors = FALSE)
+  # print(functionvector)
+  ResultVector <- c(0)
+  for (i in 1:nrow(functionvector)) {
+    ResultVector[i] = S_TopoDecfromGeoDec(functionvector$Lat[i],functionvector$GeoAlt[i],functionvector$Rim[i],functionvector$GeoDec[i],functionvector$ObjectDist[i])
+  }
+  return(ResultVector)
 }
 
 ##################################################################

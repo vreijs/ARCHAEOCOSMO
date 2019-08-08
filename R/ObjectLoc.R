@@ -1,5 +1,5 @@
-library("swephR")
 
+#' @export
 ObjectLoc <- function (JDNDaysUT,
                        Lat,
                        Longitude,
@@ -173,6 +173,7 @@ S_DeterObject <- function(ObjectNamei) {
   return(Obj)
 }
 
+#' @export
 ###################################################################
 DeltaTSE <- function(JDNDays, COD = 0) {
   # ' JDNDays [Days]

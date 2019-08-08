@@ -103,6 +103,7 @@ S_DateConversion <- function (JDNDays, Yeartype, Epoch) {
   return(Conversion)
 }
 
+#' @export
 ###################################################################
 JDutfromDate <- function (DateString,
                           hour = 0,
@@ -123,6 +124,7 @@ JDutfromDate <- function (DateString,
   return(ResultVector)
 }
 
+#' @export
 ###################################################################
 DatefromJDut <- function (JDNDaysUT,
                           Argument = 0,
@@ -385,6 +387,7 @@ S_JDutfromDate <- function (DateString,
   return(JDut)
 }
 
+#' @export
 ###################################################################
 Intdiffer <- function (Number) {
   # number
@@ -399,6 +402,7 @@ Intdiffer <- function (Number) {
   return(newinteger)
 }
 
+#' @export
 ###################################################################
 Sunobliquity <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
@@ -435,6 +439,7 @@ S_Sunobliquity <- function (JDNDays) {
   return(obl)
 }
 
+#' @export
 ###################################################################
 SolarDayOpt <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
@@ -461,6 +466,7 @@ S_SolarDayOpt <- function (JDNDays) {
   return(DayL)
 }
 
+#' @export
 ###################################################################
 SiderealDay <- function (JDNDays, COD = 0) {
   functionvector <- data.frame(JDNDays, COD)
@@ -487,6 +493,7 @@ S_SiderealDay <- function (JDNDays, COD = 0) {
   return(DayL)
 }
 
+#' @export
 ###################################################################
 HarmonicSum <- function (PeriodA, PeriodB, PlusMin = 1) {
   functionvector <- data.frame(PeriodA, PeriodB, PlusMin)
@@ -530,7 +537,7 @@ S_HS <- function(PeriodA, PeriodB) {
 }
 
 
-
+#' @export
 ###################################################################
 TropicalYear <- function (JDNDays, TropType = "mean") {
   functionvector <- data.frame(JDNDays, TropType)
@@ -583,6 +590,7 @@ S_TropicalYear <- function (JDNDays, TropType = "mean") {
   return (YearL)
 }
 
+#' @export
 ###################################################################
 TY <- function (Julcent) {
   # Julcent [Julian Century]
@@ -598,6 +606,7 @@ TY <- function (Julcent) {
   return(YearL)
 }
 
+#' @export
 ###################################################################
 TYVSOP <- function (Julmil) {
   # Julmil [Julian Millenium]
@@ -610,6 +619,7 @@ TYVSOP <- function (Julmil) {
   return(YearL)
 }
 
+#' @export
 ###################################################################
 SolarDay <- function (JDNDays, COD = 0) {
   functionvector <- data.frame(JDNDays, COD)
@@ -653,6 +663,7 @@ S_JDttfromJDut <- function (JDNDaysUT, COD = 0) {
   return(JDtt)
 }
 
+#' @export
 ###################################################################
 DeltaT <- function (JDNDays, COD = 0) {
   functionvector <- data.frame(JDNDays, COD)
@@ -701,6 +712,7 @@ S_DeltaTVR <- function (JDNDays, COD = 0) {
   return(DT)
 }
 
+#' @export
 ###################################################################
 EarthRotation <- function (JDNDays, COD = 0) {
   functionvector <- data.frame(JDNDays, COD)
@@ -726,6 +738,7 @@ S_EarthRotation <- function(JDNDays, COD = 0) {
   return(Period)
 }
 
+#' @export
 ###################################################################
 LunarSolarPrecession <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
@@ -777,6 +790,7 @@ S_LunarSolarPrecession <- function(JDNDays) {
   return(Period)
 }
 
+#' @export
 ###################################################################
 SiderealYear <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
@@ -807,6 +821,7 @@ S_SiderealYear <- function(JDNDays) {
   return(YearL)
 }
 
+#' @export
 ###################################################################
 EclipticYear <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
@@ -832,6 +847,7 @@ S_EclipticYear <- function(JDNDays) {
   return(YearL)
 }
 
+#' @export
 ###################################################################
 LunarNodalCycle <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
@@ -856,6 +872,7 @@ S_LunarNodalCycle <- function(JDNDays) {
   return(Period)
 }
 
+#' @export
 ###################################################################
 ICRSLunarNodalCycle <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
@@ -880,6 +897,7 @@ S_ICRSLunarNodalCycle <- function(JDNDays) {
   return(Period)
 }
 
+#' @export
 ###################################################################
 EarthRotationperSiderealYear <- function (JDNDays, COD = 0) {
   functionvector <- data.frame(JDNDays, COD)
@@ -903,6 +921,7 @@ S_EarthRotationperSiderealYear <- function (JDNDays, COD = 0) {
   return(Period)
 }
 
+#' @export
 ###################################################################
 EquatorPrecession <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
@@ -925,6 +944,7 @@ S_EquatorPrecession <- function(JDNDays) {
   return (Period)
 }
 
+#' @export
 ###################################################################
 AnomalisticYear <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
@@ -951,6 +971,7 @@ S_AnomalisticYear <- function(JDNDays) {
   return(YearL)
 }
 
+#' @export
 ###################################################################
 ClimaticPrecession <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
@@ -978,6 +999,7 @@ S_ClimaticPrecession <- function(JDNDays) {
   return(Period)
 }
 
+#' @export
 ###################################################################
 AnomalisticMonth <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
@@ -1002,6 +1024,7 @@ S_AnomalisticMonth <- function(JDNDays) {
   return(Period)
 }
 
+#' @export
 TropicalMonth <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
   #  print(functionvector)
@@ -1033,6 +1056,7 @@ S_TropicalMonth <- function(JDNDays) {
   return(MonthL)
 }
 
+#' @export
 SynodicMonth <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
   #  print(functionvector)
@@ -1058,6 +1082,7 @@ S_SynodicMonth <- function(JDNDays) {
   return(MonthL)
 }
 
+#' @export
 SiderealMonth <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
   #  print(functionvector)
@@ -1092,6 +1117,7 @@ S_SiderealMonth <- function(JDNDays) {
   return(MonthL)
 }
 
+#' @export
 DraconicMonth <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
   #  print(functionvector)
@@ -1115,6 +1141,7 @@ S_DraconicMonth <- function(JDNDays) {
   return(MonthL)
 }
 
+#' @export
 Eccentricity <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
   #  print(functionvector)
@@ -1139,6 +1166,7 @@ S_Eccentricity <- function(JDNDays) {
   return(Period)
 }
 
+#' @export
 PerihelionNumber <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
   #  print(functionvector)
@@ -1163,6 +1191,7 @@ S_PerihelionNumber <- function(JDNDays) {
   return(Number)
 }
 
+#' @export
 ICRSLunarApseCycle <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
   #  print(functionvector)
@@ -1187,6 +1216,7 @@ S_ICRSLunarApseCycle <- function(JDNDays) {
   return(Period)
 }
 
+#' @export
 LunarApseCycle <- function (JDNDays) {
   functionvector <- data.frame(JDNDays)
   #  print(functionvector)
@@ -1211,6 +1241,7 @@ S_LunarApseCycle <- function(JDNDays) {
   return(Period)
 }
 
+#' @export
 ###################################################################
 DayfromAngle <- function (PathAngle, JDNDays) {
   functionvector <- data.frame(PathAngle, JDNDays)
@@ -1272,6 +1303,7 @@ S_DayfromAngle <- function(PathAngle, JDNDays) {
   return(dayoud)
 }
 
+#' @export
 ###################################################################
 AngleinSunsPathfromDay <-
   function (DaysSummer,
@@ -1316,6 +1348,7 @@ S_AngleinSunsPathfromDay <-
     return(Angle)
   }
 
+#' @export
 ###################################################################
 MayaDatefromJDut <- function (JDNDays,
                               MayaDateType = 0,
