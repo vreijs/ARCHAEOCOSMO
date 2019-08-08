@@ -393,10 +393,10 @@ S_Maxpar <- function (ObjectDist) {
     Parallax <- MoonAvgPar
   }
   if (ObjectDist == "moonmajor")  {
-    Parallax <- MoonAvgPar
+    Parallax <- MoonMaxPar
   }
   if (ObjectDist == "moonminor")  {
-    Parallax <- MoonAvgPar
+    Parallax <- MoonMinPar
   }
   # maximum parallax determined by V. Reijs based on minimum earth-moon distance
   if (ObjectDist == "moonnearest") {
@@ -1150,7 +1150,7 @@ S_TopoDecfromSolarLunarEvent <- function(JDNDays, Object, NS) {
     # ' JDNDays [Day]
     # ' Object [solstice,moonmajor,moonminor]
     # ' NS (0=South-Winter,1=North-Summer)
-    # ' GeoDecfromSolarLunarEvent [deg]
+    # ' TopoDecfromSolarLunarEvent [deg]
     
     Angle <- S_GeoDecfromSolarLunarEvent(JDNDays, Object, NS,"topo")
 return(Angle)}
@@ -1164,7 +1164,7 @@ GeoDecfromSolarLunarEvent <-
     functionvector <-
       data.frame(JDNDays,
                  Object,
-                 NS, DeclType,
+                 NS, DeclType,GeoAlt,Rim,Lat,
                  stringsAsFactors = FALSE)
 #    print(functionvector)
     ResultVector <- c(0)
