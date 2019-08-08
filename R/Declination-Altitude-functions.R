@@ -1232,14 +1232,14 @@ S_GeoDecfromSolarLunarEvent <-
   }
 
 ###################################################################
-S_HourAngle <- function(TopoAlt, TopoDec, Lat) {
-  # ' TopoAlt [deg]
-  # ' TopoDec [deg]
+S_HourAngle <- function(Alt, Dec, Lat) {
+  # ' Alt [deg]
+  # ' Dec [deg]
   # ' Lat [deg]
   # ' HourAngle [hour]
   
-  Alti <- TopoAlt * Deg2Rad
-  Deci <- TopoDec * Deg2Rad
+  Alti <- Alt * Deg2Rad
+  Deci <- Dec * Deg2Rad
   Lati <- Lat * Deg2Rad
   # from http://star-www.st-and.ac.uk/~fv/webnotes/chapt12.htm
   Angle <-
