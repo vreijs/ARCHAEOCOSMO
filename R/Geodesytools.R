@@ -1,5 +1,5 @@
 ####################################################################
-# (c) V. Reijs, 2006-2018
+# (c) V. Reijs, 2006-2019
 # ARCHAEOCOSMO library (leaf from version 1.01)
 # astronomical, geodetic and meteorological formula
 #    This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 #    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #
 # The author (web.victor.reijs@gmail.com ) is interested in constructive feedback.
-# http://www.iol.ie/~geniet/eng/archaeocosmology.htm
+# http://archaeocosmology.org/eng/archaeocosmology.htm
 #
 # A few functions are linked from Swiss Ephemeris (http://www.astro.com/swisseph/):
 #   ' ObjectLoc, PlanetStar and DeltaTSE

@@ -1,5 +1,5 @@
 ####################################################################
-# (c) V. Reijs, 2006-2018
+# (c) V. Reijs, 2006-201
 # ARCHAEOCOSMO library (leaf from version 1.01)
 # astronomical, geodetic and meteorological formula
 #    This program is free software; you can redistribute it and/or modify
@@ -421,7 +421,7 @@ S_Sunobliquity <- function (JDNDays) {
   # JDNDays [Day]
   # Sunobliquity [deg]
   
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   Tbret <- S_DateConversion(JDNDays, "julian", 2000) / 1000
   if (Chapront) {
     # J Hilton et al, Celest.Mech.Dyn.Astron. 94 (2006), 351
@@ -458,7 +458,7 @@ S_SolarDayOpt <- function (JDNDays) {
   # JDNDays [Day]
   # SolarDayOpt [Hour]
   
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm#analysis
+  # http://archaeocosmology.org/eng/moonfluct.htm#analysis
   OffSetYear <- (S_JDutfromDate(StartYear, 0) - JDNDays) / 365.25
   DayL <-
     -(OffSetYear / 100 * Average) + Amplitude * sin((Phase + 360 * OffSetYear / Periodicy) * Deg2Rad)
@@ -485,7 +485,7 @@ S_SiderealDay <- function (JDNDays, COD = 0) {
   # COD [msec/century]
   # SiderealDay [Hour]
   
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   DayL <-
     S_HarmonicSum(S_TropicalYear(JDNDays, "mean") * D2H,
                   S_SolarDay(JDNDays, COD),
@@ -645,7 +645,7 @@ S_SolarDay <- function (JDNDays, COD = 0) {
   else {
     # Simple lineair formula
     CODi = COD / 1000 * S2H
-    # http://www.iol.ie/~geniet/eng/moonfluct.htm
+    # http://archaeocosmology.org/eng/moonfluct.htm
     Julcent <-
       (S_JDttfromJDut(S_JDutfromDate(StartYear, 0), COD) - JDNDays) / 365.25 / 100
     DayL <- 24 - Julcent * CODi
@@ -731,7 +731,7 @@ S_EarthRotation <- function(JDNDays, COD = 0) {
   # COD [msec/century]
   # EarthRotation [Hour]
   
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   Period = S_HarmonicSum(S_LunarSolarPrecession(JDNDays) * Y2D * D2H,
                          S_SiderealDay(JDNDays, COD),
                          1)
@@ -756,7 +756,7 @@ S_LunarSolarPrecession <- function(JDNDays) {
   # JDNDays [Day]
   # LunarSolarPrecession [Year]
   
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   if (Chapront) {
     Tbret <- S_DateConversion(JDNDays, "julian", 2000) / 100
     #PO3rev01
@@ -808,7 +808,7 @@ S_SiderealYear <- function(JDNDays) {
   # JDNDays [Day]
   # SiderealYear [Day]
   
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   if (Chapront) {
     Tbret = S_DateConversion(JDNDays, "julian", 2000) / 100
     YearL = 365.256362953 + Tbret * (0.0000001139 + Tbret * (-0.000000000076 - 0.00000000000169 * Tbret))
@@ -839,7 +839,7 @@ S_EclipticYear <- function(JDNDays) {
   # JDNDays [Day]
   # EclipticYear [Day]
   
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   # using my own methodology of simple periods
   YearL <-
     S_HarmonicSum(S_TropicalYear(JDNDays, "mean"),
@@ -865,7 +865,7 @@ S_LunarNodalCycle <- function(JDNDays) {
   # JDNDays [Day]
   # LunarNodalCycle [Year]
   
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   Period <-
     S_HD(S_ICRSLunarNodalCycle(JDNDays),
          S_LunarSolarPrecession(JDNDays))
@@ -891,7 +891,7 @@ S_ICRSLunarNodalCycle <- function(JDNDays) {
   # ICRSLunarNodalCycle [Year]
   
   # (derived by T. Peters from Chapront [2002], page 704)
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   tret <- S_DateConversion(JDNDays, "julian", 2000) / 100
   Period = (6793.476501 + tret * (0.0124002 + tret * (0.000022325 - tret * 0.00000013985))) * D2Y
   return(Period)
@@ -916,7 +916,7 @@ S_EarthRotationperSiderealYear <- function (JDNDays, COD = 0) {
   # COD [msec/century]
   # EarthRotationperSiderealYear [-]
   
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   Period = S_SiderealYear(JDNDays) * D2H / S_EarthRotation(JDNDays, COD)
   return(Period)
 }
@@ -962,7 +962,7 @@ S_AnomalisticYear <- function(JDNDays) {
   # JDNDays [Day]
   # AnomalisticYear [Day]
   
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   # using my own methodology of simple periods
   YearL <-
     S_HarmonicSum(S_TropicalYear(JDNDays, "mean"),
@@ -989,7 +989,7 @@ S_ClimaticPrecession <- function(JDNDays) {
   # JDNDays [Day]
   # ClimaticPrecession [Year]
   
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   dd <- S_DateConversion(JDNDays, "julian", 1900) / 10000 * Y2D
   # drived from Expl. Suppl, page 98
   Period <-
@@ -1017,7 +1017,7 @@ S_AnomalisticMonth <- function(JDNDays) {
   # JDNDays [Day]
   # AnomalisticMonth [Day]
   
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   # using my own methodology of simple periods
   Period <-
     HarmonicSum(SiderealMonth(JDNDays), LunarApseCycle(JDNDays) * Y2D, 1)
@@ -1047,7 +1047,7 @@ S_TropicalMonth <- function(JDNDays) {
                   1)
   }
   else {
-    # http://www.iol.ie/~geniet/eng/moonfluct.htm
+    # http://archaeocosmology.org/eng/moonfluct.htm
     dd <- S_DateConversion(JDNDays, "julian", 1900) / 10000 * Y2D
     # drived from Expl. Suppl, page 107
     MonthL <-
@@ -1073,7 +1073,7 @@ S_SynodicMonth <- function(JDNDays) {
   # JDNDays [Day]
   # SynodicMonth [Day]
   
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   # using my own methodology of simple periods
   MonthL <-
     S_HarmonicSum(S_TropicalYear(JDNDays, "mean"),
@@ -1099,7 +1099,7 @@ S_SiderealMonth <- function(JDNDays) {
   # JDNDays [Day]
   # SiderealMonth [Day]
   
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   # using my own methodology of simple periods
   if (Chapront) {
     # derived by T. Peters from Chapront [2002], page 704
@@ -1134,7 +1134,7 @@ S_DraconicMonth <- function(JDNDays) {
   # JDNDays [Day]
   # DraconicMonth [Day]
   
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   # using my own methodology of simple periods
   MonthL = S_HarmonicSum(S_LunarNodalCycle(JDNDays) * Y2D,
                          S_TropicalMonth(JDNDays),-1)
@@ -1158,7 +1158,7 @@ S_Eccentricity <- function(JDNDays) {
   # JDNDays [Day]
   # Eccentricity [-]
   
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   # from Expl. Suppl, page 98
   Julcent <- S_DateConversion(JDNDays, "julian", 1900) / 100
   Period <-
@@ -1184,8 +1184,8 @@ S_PerihelionNumber <- function(JDNDays) {
   # PerihelionNumber [Day]
   
   # Determined by V. Reijs (using SkyMap)
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
-  # http://www.iol.ie/~geniet/eng/season.htm
+  # hthttp://archaeocosmology.org/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/season.htm
   Julcent <- S_DateConversion(JDNDays, "julian", 2000)
   Number <- 197.26 + Julcent * 0.017808333
   return(Number)
@@ -1209,7 +1209,7 @@ S_ICRSLunarApseCycle <- function(JDNDays) {
   # ICRSLunarApseCycle [Year]
   
   # (Chapront [2002], page 704)
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # hhttp://archaeocosmology.org/eng/moonfluct.htm
   tret <- S_DateConversion(JDNDays, "julian", 2000) / 100
   Period <-
     (3232.60542496 + tret * (0.0168939 + tret * (0.000029833 - tret * 0.00000018809))) * D2Y
@@ -1234,7 +1234,7 @@ S_LunarApseCycle <- function(JDNDays) {
   # LunarApseCycle [Year]
   
   # Determined by V. Reijs
-  # http://www.iol.ie/~geniet/eng/moonfluct.htm
+  # http://archaeocosmology.org/eng/moonfluct.htm
   Period <-
     S_HS(S_LunarSolarPrecession(JDNDays),
          S_ICRSLunarApseCycle(JDNDays))
@@ -1267,7 +1267,7 @@ S_DayfromAngle <- function(PathAngle, JDNDays) {
   maxerror <- 0.0000001
   richting <- 1
   stap <- 1
-  # V. Reijs, http://www.iol.ie/~geniet/eng/season.htm
+  # V. Reijs, http://archaeocosmology.org//eng/season.htm
   dayoud <- (PathAngle / 90) * 365.2424 / 4
   angleoud <-
     S_AngleinSunsPathfromDay(dayoud, TropYear, AnoYear, Ecc, Perihelion)
@@ -1342,7 +1342,7 @@ S_AngleinSunsPathfromDay <-
     # ' Perihelion [Day]
     # ' AngleinSunsPathfromDay [Deg]
     
-    # V. Reijs, 2004, http://www.iol.ie/~geniet/eng/season.htm
+    # V. Reijs, 2004, hhttp://archaeocosmology.org/eng/season.htm
     Angle <-
       360 / TropYear * DaysSummer + Ecc * 2 * Rad2Deg * sin(360 / AnoYear * (DaysSummer - Perihelion) * Deg2Rad)
     return(Angle)

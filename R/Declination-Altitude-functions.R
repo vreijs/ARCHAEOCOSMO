@@ -586,7 +586,7 @@ S_GeoDecfromGeoAlt <-
     Lati <- Lat * Deg2Rad
     GeoAlti <- (GeoAlt - Rim * AvgRadius) * Deg2Rad
     Azii <- Azi * Deg2Rad
-    # http://www.iol.ie/~geniet/eng/accuracy.htm
+    # http://archaeocosmology.org/eng/accuracy.htm
     DecAngle <-
       asin(sin(Lati) * sin(GeoAlti) + cos(Lati) * cos(GeoAlti) * cos(Azii))
     DecAngle  <- DecAngle  * Rad2Deg
@@ -1106,7 +1106,7 @@ S_AzifromGeoAlt <- function(Lat, GeoAlt, GeoDec, Rim) {
   Lati <- Lat * Deg2Rad
   GeoAlti <- (GeoAlt - Rim * AvgRadius) * Deg2Rad
   GeoDeci <- GeoDec * Deg2Rad
-  # http://www.iol.ie/~geniet/eng/accuracy.htm
+  # http://archaeocosmology.org/eng/accuracy.htm
   Hoek <-
     (sin(GeoDeci) - sin(Lati) * sin(GeoAlti)) / (cos(Lati) * cos(GeoAlti))
   #If Abs(Hoek) <= 1 Then
@@ -1302,7 +1302,7 @@ S_GeoDecfromDay <-
     # ' GeoDecfromDay [Deg]
     
     Obli <- Obl * Deg2Rad
-    # V. Reijs, 2004, http://www.iol.ie/~geniet/eng/season.htm
+    # V. Reijs, 2004, http://archaeocosmology.org/eng/season.htm
     Angle <-
       asin(sin(Obli) * cos((
         360 / TropYear * DaysSummer + Ecc * 2 * Rad2Deg * sin(360 / AnoYear * (DaysSummer - Perihelion) * Deg2Rad)
@@ -1325,7 +1325,7 @@ S_DayfromGeoDec <- function(GeoDec, JDNDays, AfterSummer) {
   maxerror <- 0.0000001
   richting <- 1
   stap <- 1
-  # V. Reijs, http: /  / www.iol.ie /  ~ geniet / eng / season.htm
+  # V. Reijs, http://archaeocosmology.org/ eng / season.htm
   dayoud <- S_DayfromGeoDecSimple(GeoDec, JDNDays)
   if (AfterSummer == 1) {
     dayoud = -dayoud
@@ -1401,7 +1401,7 @@ S_DayfromAngle <- function(PathAngle, JDNDays) {
   maxerror <- 0.0000001
   richting <- 1
   stap <- 1
-  # V. Reijs, http://www.iol.ie/~geniet/eng/season.htm
+  # V. Reijs, http://archaeocosmology.org/eng/season.htm
   dayoud <- (PathAngle / 90) * 365.2424 / 4
   angleoud <-
     S_AngleinSunsPath(dayoud, TropYear, AnoYear, Ecc, Perihelion)
